@@ -1,1 +1,88 @@
-@import 'variables';
+@use '@/assets/sass/reset';
+@use '@/assets/sass/font' as f;
+@use '@/assets/sass/variables' as v;
+
+#nav {
+  width: 100%;
+  height: 60px;
+  align-content: center;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .logo {
+      color: #f2f2f2;
+      font-size: 32px;
+      font-family: f.$IS;
+    }
+
+    .nav-button-area {
+      button {
+        font-size: 12px;
+        background-color: v.$primary;
+        color: v.$white;
+        border: 1px solid v.$white;
+        border-radius: 50px;
+        padding: 6px 12px;
+
+        + button {
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+}
+
+#main {
+  height: 100vh;
+  padding: 0 20px;
+  background-color: v.$primary;
+
+  .main-home {
+    text-align: center;
+    padding-top: 100px;
+
+    .main-title {
+      text-align: center;
+      color: v.$white;
+      font-family: f.$IS;
+
+      p {
+        font-size: 24px;
+        font-weight: 700;
+
+        + p {
+          margin-top: 15px;
+        }
+      }
+    }
+
+    .main-button {
+      margin-top: 50px;
+
+      button {
+        font-size: 22px;
+        color: v.$white;
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 20px 40px;
+        border-radius: 25px;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .main-footer {
+    position: absolute;
+    bottom: 20px;
+    color: v.$white;
+    width: calc(100% - 40px);
+    text-align: center;
+
+    p {
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
+}

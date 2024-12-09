@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: 'Inter-Regular';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('@/assets/fonts/inter/Inter-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Inter-Medium';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('@/assets/fonts/inter/Inter-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Inter-SemiBold';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('@/assets/fonts/inter/Inter-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Inter-Bold';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('@/assets/fonts/inter/Inter-Bold.ttf') format('truetype');
+}
+
+$IR: 'Inter-Regular';
+$IM: 'Inter-Medium';
+$IS: 'Inter-SemiBold';
+$IB: 'Inter-Bold';
