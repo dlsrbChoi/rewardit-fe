@@ -3,7 +3,6 @@
 @use '@/assets/sass/variables' as v;
 
 #nav {
-  width: 100%;
   height: 60px;
   align-content: center;
 
@@ -83,6 +82,175 @@
     p {
       font-size: 12px;
       font-weight: 400;
+    }
+  }
+}
+
+#sub {
+  height: 100vh;
+
+  .inner {
+    padding: 0 20px;
+    height: calc(100% - 60px - 50%);
+    padding-top: 50px;
+  }
+
+  #nav {
+    padding: 0 20px;
+
+    .header {
+      .logo {
+        color: v.$primary;
+      }
+    }
+  }
+
+  .login-home {
+    .title-area {
+      p {
+        font-size: 17px;
+        font-weight: 400;
+        color: #666666;
+
+        strong {
+          font-weight: 700;
+          font-size: 33px;
+          line-height: 54px;
+          color: v.$black;
+        }
+
+        span {
+          &.blue {
+            color: v.$primary;
+            font-weight: 700;
+          }
+        }
+
+        + p {
+          margin-top: 13px;
+        }
+      }
+    }
+  }
+
+  .button-area {
+    margin-top: 50px;
+
+    button {
+      height: 52px;
+      width: 100%;
+      border-radius: 4px;
+      background-color: v.$second;
+      color: v.$white;
+      font-size: 17px;
+      font-weight: 700;
+
+      + button {
+        margin-top: 10px;
+      }
+    }
+  }
+
+  .half-menu {
+    width: 100%;
+    height: 250px;
+    background-color: v.$primary;
+    position: absolute;
+    bottom: 0;
+
+    &.scroll {
+      overflow-y: scroll;
+    }
+
+    .half-title {
+      justify-items: center;
+      transform: translateY(100%);
+
+      p {
+        font-weight: 700;
+        font-size: 22px;
+        color: #82caff;
+        line-height: 35px;
+
+        span {
+          color: #020609;
+          font-size: 32px;
+          font-family: f.$IS;
+        }
+      }
+    }
+  }
+
+  .terms {
+    padding: 20px;
+    font-weight: 700;
+    color: #82caff;
+  }
+
+  .reward-home {
+    border-top: 10px solid v.$black;
+    background-color: v.$primary;
+    height: 100%;
+    text-align: center;
+
+    .main-title {
+      margin: 40px 0 60px 0;
+      font-size: 30px;
+      font-weight: 700;
+      color: v.$white;
+    }
+
+    .tab-menu {
+      width: 100%;
+
+      ul {
+        display: flex;
+        justify-content: center;
+
+        li {
+          width: 80px;
+          background-color: v.$second;
+          color: v.$white;
+          padding: 3px 0;
+          border-right: 1px solid v.$primary;
+          font-size: 15px;
+          font-family: f.$IS;
+
+          &:last-child {
+            border-right: none;
+          }
+
+          &.active {
+            background-color: v.$white;
+            color: v.$primary;
+          }
+        }
+      }
+    }
+
+    .contents {
+      padding: 0 20px;
+      margin-top: 60px;
+      height: 100%;
+
+      .page-title {
+        font-size: 18px;
+        text-align: start;
+        color: v.$white;
+        font-family: f.$IB;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+
+      .ads-card {
+        width: 100%;
+        height: 200px;
+        background-color: v.$white;
+
+        + .ads-card {
+          margin-top: 15px;
+        }
+      }
     }
   }
 }

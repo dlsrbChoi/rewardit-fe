@@ -1,5 +1,9 @@
 <template>
-  <div id="main">
+  <div v-if="$route.name == 'main'" id="main">
+    <GnbArea />
+    <RouterView />
+  </div>
+  <div v-else id="sub">
     <GnbArea />
     <RouterView />
   </div>

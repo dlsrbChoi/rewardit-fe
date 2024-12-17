@@ -6,13 +6,15 @@
       <p>지금 시작하세요!</p>
     </div>
     <div class="main-button">
-      <button type="button">리워딧 시작하기</button>
+      <button type="button" @click="$router.push('/login')">
+        리워딧 시작하기
+      </button>
     </div>
   </div>
   <div class="main-footer">
     <p>
       다양한 리워드와 빠르고 간편하게 부수입을 얻을 수 있는<br />국내 최고의
-      플랫폼, Rewordit.
+      플랫폼, Rewardit.
     </p>
   </div>
 </template>

@@ -13,6 +13,30 @@ const routes = [
         /* webpackChunkName: "view-main-vue" */ '@/pages/mainpage/mainPage.vue'
       ),
   },
+  {
+    path: '/login',
+    name: 'loginPage',
+    component: () =>
+      import(
+        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/loginPage.vue'
+      ),
+  },
+  {
+    path: '/agreement',
+    name: 'agreementPage',
+    component: () =>
+      import(
+        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/agreementPage.vue'
+      ),
+  },
+  {
+    path: '/reward',
+    name: 'rewardPage',
+    component: () =>
+      import(
+        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/rewardPage.vue'
+      ),
+  },
 ];
 
 const router = createRouter({

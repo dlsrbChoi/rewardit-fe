@@ -64,6 +64,11 @@ section {
   display: block;
 }
 
+ul,
+li {
+  list-style-type: none;
+}
+
 body,
 html {
   width: 100%;
