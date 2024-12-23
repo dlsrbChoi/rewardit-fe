@@ -87,7 +87,7 @@
 }
 
 #sub {
-  height: 100vh;
+  height: 100%;
 
   .inner {
     padding: 0 20px;
@@ -231,6 +231,7 @@
     .contents {
       padding: 0 20px;
       margin-top: 60px;
+      padding-bottom: 60px;
       height: 100%;
 
       .page-title {
@@ -244,13 +245,272 @@
 
       .ads-card {
         width: 100%;
-        height: 200px;
+        height: 350px;
         background-color: v.$white;
+        border-radius: 10px;
 
         + .ads-card {
           margin-top: 15px;
         }
+
+        .ads-top {
+          height: 50%;
+          align-content: center;
+          background-color: #e8f2f8;
+          border-top-left-radius: 10px;
+          border-top-right-radius: 10px;
+
+          img {
+            height: 140px;
+          }
+        }
+
+        .ads-bottom {
+          height: 50%;
+          background-color: #8ec3ff;
+          border-bottom-left-radius: 10px;
+          border-bottom-right-radius: 10px;
+
+          .text-area {
+            padding: 8px 10px;
+
+            div + div {
+              margin-top: 3px;
+            }
+
+            .text-box {
+              font-size: 14px;
+              background-color: v.$white;
+              border: 1px solid #007bff;
+              font-weight: 700;
+              color: #007bff;
+              text-align: start;
+              padding: 8px;
+              border-radius: 3px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+
+              span {
+                white-space: nowrap;
+
+                &.description {
+                  color: v.$black;
+                }
+              }
+            }
+          }
+
+          .possible-area {
+            font-size: 14px;
+            width: 120px;
+            border: 1px solid #007bff;
+            font-weight: 700;
+            color: #007bff;
+            background-color: v.$white;
+            height: 100%;
+            justify-self: end;
+            border-radius: 3px;
+
+            p {
+              + p {
+                border-top: 1px solid #007bff;
+                color: v.$black;
+              }
+            }
+          }
+
+          .reward-area {
+            font-size: 14px;
+            border: 1px solid #007bff;
+            font-weight: 700;
+            color: #007bff;
+            background-color: v.$white;
+            height: 100%;
+            padding: 8px 15px;
+            border-radius: 3px;
+
+            span {
+              + span {
+                margin-left: 20px;
+                color: v.$black;
+              }
+            }
+          }
+        }
       }
     }
   }
+
+  .flex {
+    display: flex;
+
+    &.sb {
+      justify-content: space-between;
+    }
+  }
+}
+
+.alert {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 10000;
+  min-width: 300px;
+  overflow: hidden;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  border-radius: 14px;
+
+  &.check {
+    .alertCont {
+      background: url('@/assets/images/ico-alert-check.svg')
+        no-repeat top 47px center;
+    }
+  }
+
+  &.confirm {
+    .alertCont {
+      background: url('@/assets/images/ico-alert-confirm.svg')
+        no-repeat top 47px center;
+    }
+  }
+
+  .alertCont {
+    text-align: center;
+    background: url('@/assets/images/ico-alert-warning.svg')
+      no-repeat top 47px center;
+    .inner {
+      width: 100%;
+      padding: 122px 0 0 !important;
+    }
+
+    p {
+      padding: 0 30px;
+      line-height: 26px;
+      word-break: keep-all;
+    }
+
+    pre {
+      min-height: initial;
+      padding: 0 20px;
+      line-height: 26px;
+      font-size: 16px;
+    }
+
+    .btn-area {
+      margin-top: 30px;
+      flex-wrap: nowrap;
+      gap: 0;
+
+      .btn {
+        width: 100%;
+        min-width: 150px !important;
+        height: 50px;
+        border-radius: 0;
+
+        + .btn {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+
+  .alertBottom {
+    margin-top: initial !important;
+  }
+
+  .closeBtn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 35px;
+    height: 35px;
+    background: url('@/assets/images/ico-pop-close.svg')
+      no-repeat center/contain;
+  }
+}
+
+// 모달
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 10000;
+  width: 300px;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 10px;
+
+  .modalHead {
+    padding: 0 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: v.$primary;
+    color: v.$white;
+
+    .title {
+      height: 50px;
+      line-height: 50px;
+      font-size: 18px;
+    }
+  }
+
+  .modalCont {
+    height: calc(100% - 50px);
+    max-height: 600px;
+    margin-top: initial !important;
+    overflow-y: auto;
+
+    .modal-inner {
+      padding: 20px;
+    }
+
+    article {
+      + article {
+        margin-top: 20px !important;
+      }
+    }
+
+    p {
+      font-size: 16px;
+
+      + div {
+        margin-top: 10px;
+      }
+    }
+  }
+
+  .modalBottom {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 15px 20px;
+    background-color: #0070bd;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+
+  .closeBtn {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    width: 28px;
+    height: 28px;
+    background: url('@/assets/images/ico-close-white.svg')
+      no-repeat center;
+    background-size: cover;
+  }
+}
+
+#dim,
+.dim {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 100vh !important;
+  background: rgba($color: v.$black, $alpha: 0.8);
 }

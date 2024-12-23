@@ -80,3 +80,14 @@ html {
   font-family: f.$IR;
   // letter-spacing: -0.05em !important;
 }
+
+.hidden {
+  display: block;
+  margin: 0;
+  padding: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  font-size: 0;
+  line-height: 0;
+}
