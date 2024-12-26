@@ -12,8 +12,8 @@
     align-items: center;
 
     .logo {
-      color: #f2f2f2;
-      font-size: 32px;
+      color: v.$second;
+      font-size: 20px;
       font-family: f.$IS;
     }
 
@@ -21,14 +21,78 @@
       button {
         font-size: 12px;
         background-color: v.$primary;
-        color: v.$white;
-        border: 1px solid v.$white;
+        color: v.$second;
+        border: 1px solid v.$second;
         border-radius: 50px;
         padding: 6px 12px;
 
         + button {
           margin-left: 8px;
         }
+      }
+
+      .menuButton {
+        border: none;
+        width: 24px;
+        height: 24px;
+        background: url('@/assets/images/icon-hambuger.svg')
+          no-repeat center/contain;
+      }
+
+      .closeMenu {
+        border: none;
+        width: 24px;
+        height: 24px;
+        background: url('@/assets/images/icon-close.svg');
+      }
+    }
+
+    .menu-bar {
+      z-index: 999;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      background-color: v.$third;
+
+      .user-area {
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 00;
+
+        span {
+          font-weight: 700;
+          color: v.$second;
+        }
+
+        button {
+          font-size: 12px;
+          background-color: v.$primary;
+          color: v.$second;
+          border: 1px solid v.$second;
+          border-radius: 50px;
+          padding: 6px 12px;
+        }
+      }
+
+      ul {
+        padding: 0 40px;
+
+        li {
+          height: 60px;
+          font-size: 18px;
+          font-weight: 700;
+          align-content: center;
+          border-top: 1px solid v.$second;
+          opacity: 0.7;
+        }
+      }
+
+      .menu-dim {
+        height: 100vh;
+        background: rgba($color: v.$black, $alpha: 0.5);
       }
     }
   }
@@ -45,11 +109,11 @@
 
     .main-title {
       text-align: center;
-      color: v.$white;
+      color: v.$second;
       font-family: f.$IS;
 
       p {
-        font-size: 24px;
+        font-size: 20px;
         font-weight: 700;
 
         + p {
@@ -62,9 +126,9 @@
       margin-top: 50px;
 
       button {
-        font-size: 22px;
-        color: v.$white;
-        background-color: rgba(255, 255, 255, 0.2);
+        font-size: 20px;
+        color: v.$second;
+        background-color: rgba(255, 255, 255, 0.4);
         padding: 20px 40px;
         border-radius: 25px;
         font-weight: 700;
@@ -75,7 +139,7 @@
   .main-footer {
     position: absolute;
     bottom: 20px;
-    color: v.$white;
+    color: v.$second;
     width: calc(100% - 40px);
     text-align: center;
 
@@ -97,12 +161,7 @@
 
   #nav {
     padding: 0 20px;
-
-    .header {
-      .logo {
-        color: v.$primary;
-      }
-    }
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
 
   .login-home {
@@ -114,14 +173,16 @@
 
         strong {
           font-weight: 700;
-          font-size: 33px;
-          line-height: 54px;
+          font-size: 27px;
+          line-height: 45px;
           color: v.$black;
         }
 
         span {
-          &.blue {
-            color: v.$primary;
+          font-size: 14px;
+
+          &.bold {
+            color: v.$second;
             font-weight: 700;
           }
         }
@@ -137,12 +198,12 @@
     margin-top: 50px;
 
     button {
-      height: 52px;
+      height: 45px;
       width: 100%;
       border-radius: 4px;
       background-color: v.$second;
       color: v.$white;
-      font-size: 17px;
+      font-size: 15px;
       font-weight: 700;
 
       + button {
@@ -157,23 +218,22 @@
     background-color: v.$primary;
     position: absolute;
     bottom: 0;
+    text-align: center;
 
     &.scroll {
       overflow-y: scroll;
     }
 
     .half-title {
-      justify-items: center;
       transform: translateY(100%);
 
       p {
         font-weight: 700;
         font-size: 22px;
-        color: #82caff;
+        color: v.$second;
         line-height: 35px;
 
         span {
-          color: #020609;
           font-size: 32px;
           font-family: f.$IS;
         }
@@ -183,21 +243,21 @@
 
   .terms {
     padding: 20px;
-    font-weight: 700;
-    color: #82caff;
+    font-weight: 400;
+    color: v.$black;
   }
 
   .reward-home {
-    border-top: 10px solid v.$black;
     background-color: v.$primary;
     height: 100%;
     text-align: center;
 
     .main-title {
-      margin: 40px 0 60px 0;
+      padding-top: 40px;
+      margin-bottom: 60px;
       font-size: 30px;
       font-weight: 700;
-      color: v.$white;
+      color: v.$second;
     }
 
     .tab-menu {
@@ -208,20 +268,27 @@
         justify-content: center;
 
         li {
-          width: 80px;
-          background-color: v.$second;
-          color: v.$white;
-          padding: 3px 0;
+          width: 100px;
+          background-color: v.$white;
+          color: v.$second;
+          padding: 8px 0;
           border-right: 1px solid v.$primary;
           font-size: 15px;
           font-family: f.$IS;
 
+          &:first-child {
+            border-top-left-radius: 20px;
+            border-bottom-left-radius: 20px;
+          }
+
           &:last-child {
             border-right: none;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
           }
 
           &.active {
-            background-color: v.$white;
+            background-color: v.$second;
             color: v.$primary;
           }
         }
@@ -230,90 +297,81 @@
 
     .contents {
       padding: 0 20px;
-      margin-top: 60px;
+      margin-top: 40px;
       padding-bottom: 60px;
       height: 100%;
 
       .page-title {
         font-size: 18px;
         text-align: start;
-        color: v.$white;
+        color: v.$second;
         font-family: f.$IB;
         font-weight: 600;
         margin-bottom: 20px;
       }
 
       .ads-card {
-        width: 100%;
-        height: 350px;
-        background-color: v.$white;
+        height: 320px;
+        background-color: v.$third;
         border-radius: 10px;
+        padding: 20px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        position: relative;
 
         + .ads-card {
+          margin-top: 20px;
+        }
+
+        img {
+          width: 100%;
+          height: 120px;
+        }
+
+        .text-area {
           margin-top: 15px;
-        }
 
-        .ads-top {
-          height: 50%;
-          align-content: center;
-          background-color: #e8f2f8;
-          border-top-left-radius: 10px;
-          border-top-right-radius: 10px;
+          .text-box {
+            font-size: 14px;
+            background-color: v.$primary;
+            border: 1px solid v.$second;
+            font-weight: 700;
+            color: v.$second;
+            text-align: start;
+            padding: 8px;
+            border-radius: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
 
-          img {
-            height: 140px;
-          }
-        }
-
-        .ads-bottom {
-          height: 50%;
-          background-color: #8ec3ff;
-          border-bottom-left-radius: 10px;
-          border-bottom-right-radius: 10px;
-
-          .text-area {
-            padding: 8px 10px;
-
-            div + div {
-              margin-top: 3px;
+            + .text-box {
+              margin-top: 8px;
             }
 
-            .text-box {
-              font-size: 14px;
-              background-color: v.$white;
-              border: 1px solid #007bff;
-              font-weight: 700;
-              color: #007bff;
-              text-align: start;
-              padding: 8px;
-              border-radius: 3px;
-              overflow: hidden;
-              text-overflow: ellipsis;
+            span {
+              white-space: nowrap;
 
-              span {
-                white-space: nowrap;
-
-                &.description {
-                  color: v.$black;
-                }
+              &.description {
+                color: v.$black;
               }
             }
           }
+        }
+
+        .result-area {
+          margin-top: 18px;
 
           .possible-area {
             font-size: 14px;
             width: 120px;
-            border: 1px solid #007bff;
+            border: 1px solid v.$second;
             font-weight: 700;
-            color: #007bff;
+            color: v.$second;
             background-color: v.$white;
             height: 100%;
-            justify-self: end;
             border-radius: 3px;
 
             p {
               + p {
-                border-top: 1px solid #007bff;
+                border-top: 1px solid v.$second;
                 color: v.$black;
               }
             }
@@ -321,18 +379,20 @@
 
           .reward-area {
             font-size: 14px;
-            border: 1px solid #007bff;
+            border: 1px solid v.$second;
             font-weight: 700;
-            color: #007bff;
-            background-color: v.$white;
+            color: v.$white;
+            background-color: v.$second;
             height: 100%;
             padding: 8px 15px;
             border-radius: 3px;
+            margin-top: 7px;
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px
+              0px;
 
             span {
               + span {
                 margin-left: 20px;
-                color: v.$black;
               }
             }
           }

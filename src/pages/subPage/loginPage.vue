@@ -6,8 +6,10 @@
           <strong>안녕하세요.<br />리워딧 입니다.</strong>
         </p>
         <p>
-          <span class="blue">빠르고 간편</span>하게 즉시,
-          <span class="blue">사용</span>해보세요!
+          <span>
+            <span class="bold">빠르고 간편</span>하게 즉시,
+            <span class="bold">사용</span>해보세요!
+          </span>
         </p>
       </div>
       <div class="button-area">

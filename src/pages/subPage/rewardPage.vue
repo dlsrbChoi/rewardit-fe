@@ -13,29 +13,28 @@
     <div class="contents">
       <p class="page-title">참여형 광고</p>
       <div class="ads-card">
-        <div class="ads-top">
-          <img
-            src="../../assets/images/sampleAdd.png"
-            alt="광고 썸네일"
-          />
-        </div>
-        <div class="ads-bottom">
-          <div class="text-area">
-            <div
-              class="text-box"
-              @click="showCampaignExplainModal"
-            >
-              <span>캠페인 참여 설명 : </span>
-              <span class="description">
-                이미지를 클릭 뒤 URL 접속 후 회원가입
-              </span>
-            </div>
-            <div class="text-box">
-              <span>캠페인 참여 조건 : </span>
-              <span class="description">
-                회원가입 후 아이디 입력 및 이벤트 신청
-              </span>
-            </div>
+        <img
+          src="../../assets/images/sampleAdd.png"
+          alt="광고 썸네일"
+        />
+
+        <div class="text-area">
+          <div
+            class="text-box"
+            @click="showCampaignExplainModal"
+          >
+            <span>캠페인 참여 설명 : </span>
+            <span class="description">
+              이미지를 클릭 뒤 URL 접속 후 회원가입
+            </span>
+          </div>
+          <div class="text-box">
+            <span>캠페인 참여 조건 : </span>
+            <span class="description">
+              회원가입 후 아이디 입력 및 이벤트 신청
+            </span>
+          </div>
+          <div class="result-area">
             <div class="possible-area">
               <p>재참여 가능 여부</p>
               <p>가능</p>
@@ -68,13 +67,15 @@
                 회원가입 후 아이디 입력 및 이벤트 신청
               </span>
             </div>
-            <div class="possible-area">
-              <p>재참여 가능 여부</p>
-              <p>가능</p>
-            </div>
-            <div class="reward-area">
-              <span>30초 영상보기</span>
-              <span>30원</span>
+            <div class="result-area">
+              <div class="possible-area">
+                <p>재참여 가능 여부</p>
+                <p>가능</p>
+              </div>
+              <div class="reward-area">
+                <span>30초 영상보기</span>
+                <span>30원</span>
+              </div>
             </div>
           </div>
         </div>
