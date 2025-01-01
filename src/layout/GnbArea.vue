@@ -1,7 +1,9 @@
 <template>
   <header id="nav">
     <div class="header">
-      <div class="logo">Rewardit</div>
+      <div class="logo" @click="$router.push('/reward')">
+        Rewardit
+      </div>
       <div class="nav-button-area">
         <button v-if="$route.name === 'main'" type="button">
           로그인
@@ -33,9 +35,18 @@
           <button type="button">로그아웃</button>
         </div>
         <ul>
-          <li>마이페이지</li>
-          <li>QR 사용</li>
-          <li>관리자 페이지</li>
+          <li @click="$router.push('/mypage')">
+            마이페이지
+          </li>
+          <li @click="$router.push('/mypage/qr-code/use')">
+            QR 사용
+          </li>
+          <li @click="$router.push('/login/business')">
+            사장님 페이지
+          </li>
+          <li @click="$router.push('/admin')">
+            관리자 페이지
+          </li>
         </ul>
         <div class="menu-dim" />
       </div>
@@ -49,6 +60,12 @@ export default {
     return {
       isMenuShow: false,
     };
+  },
+
+  watch: {
+    $route() {
+      this.isMenuShow = false;
+    },
   },
 
   methods: {

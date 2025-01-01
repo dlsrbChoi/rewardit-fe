@@ -64,6 +64,21 @@ section {
   display: block;
 }
 
+caption,
+hr {
+  overflow: hidden;
+  position: relative;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  background: 0 0;
+  font-size: 0;
+  color: transparent;
+  line-height: 0;
+  text-indent: 100%;
+}
+
 ul,
 li {
   list-style-type: none;
@@ -77,7 +92,7 @@ html {
   padding: 0;
   font-size: 16px;
   color: #0a0a0a;
-  font-family: f.$IR;
+  font-family: f.$SR;
   // letter-spacing: -0.05em !important;
 }
 

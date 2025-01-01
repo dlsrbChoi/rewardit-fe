@@ -37,6 +37,54 @@ const routes = [
         /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/rewardPage.vue'
       ),
   },
+  {
+    path: '/mypage',
+    name: 'generalMyPage',
+    component: () =>
+      import(
+        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/generalMyPage.vue'
+      ),
+  },
+  {
+    path: '/mypage/qr-code',
+    name: 'QRcodeHistoryPage',
+    component: () =>
+      import(
+        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/QRcodeHistoryPage.vue'
+      ),
+  },
+  {
+    path: '/mypage/qr-code/use',
+    name: 'QRcodeUsePage',
+    component: () =>
+      import(
+        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/QRcodeUsePage.vue'
+      ),
+  },
+  {
+    path: '/admin',
+    name: 'adminPage',
+    component: () =>
+      import(
+        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/adminPage.vue'
+      ),
+  },
+  {
+    path: '/login/business',
+    name: 'businessLoginPage',
+    component: () =>
+      import(
+        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/businessLoginPage.vue'
+      ),
+  },
+  {
+    path: '/business',
+    name: 'businessPage',
+    component: () =>
+      import(
+        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/businessPage.vue'
+      ),
+  },  
 ];
 
 const router = createRouter({

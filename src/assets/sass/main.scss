@@ -14,7 +14,7 @@
     .logo {
       color: v.$second;
       font-size: 20px;
-      font-family: f.$IS;
+      font-family: f.$SR;
     }
 
     .nav-button-area {
@@ -64,7 +64,7 @@
 
         span {
           font-weight: 700;
-          color: v.$second;
+          color: #3888dd;
         }
 
         button {
@@ -110,7 +110,7 @@
     .main-title {
       text-align: center;
       color: v.$second;
-      font-family: f.$IS;
+      font-family: f.$SR;
 
       p {
         font-size: 20px;
@@ -192,6 +192,42 @@
         }
       }
     }
+
+    .login-area {
+      margin-top: 20px;
+
+      .input-area {
+        .title {
+          font-size: 18px;
+        }
+
+        .contents {
+          margin-top: 8px;
+          margin-left: 10px;
+
+          input {
+            width: 250px;
+            height: 24px;
+            font-size: 18px;
+            font-family: f.$SR;
+            padding: 5px 10px;
+          }
+        }
+
+        + .input-area {
+          margin-top: 10px;
+        }
+      }
+
+      .login-button-area {
+        margin-top: 15px;
+        text-align: center;
+
+        button {
+          width: 150px;
+        }
+      }
+    }
   }
 
   .button-area {
@@ -235,7 +271,7 @@
 
         span {
           font-size: 32px;
-          font-family: f.$IS;
+          font-family: f.$SR;
         }
       }
     }
@@ -274,7 +310,7 @@
           padding: 8px 0;
           border-right: 1px solid v.$primary;
           font-size: 15px;
-          font-family: f.$IS;
+          font-family: f.$SR;
 
           &:first-child {
             border-top-left-radius: 20px;
@@ -305,7 +341,7 @@
         font-size: 18px;
         text-align: start;
         color: v.$second;
-        font-family: f.$IB;
+        font-family: f.$SR;
         font-weight: 600;
         margin-bottom: 20px;
       }
@@ -401,12 +437,182 @@
     }
   }
 
+  .mypage-home {
+    height: 100%;
+    text-align: center;
+    padding: 0 20px;
+    padding-bottom: 50px;
+
+    .main-title {
+      padding-top: 40px;
+      margin-bottom: 40px;
+      font-size: 30px;
+      color: v.$second;
+    }
+
+    .tab-menu {
+      place-items: center;
+
+      ul {
+        li {
+          background-color: #eeeeee;
+          padding: 10px 40px;
+          border-radius: 20px;
+          color: #7c7c7c;
+          opacity: 0.8;
+          font-weight: 400;
+
+          + li {
+            margin-top: 8px;
+          }
+
+          &.active {
+            background-color: v.$primary;
+            font-weight: 700;
+            opacity: 1;
+          }
+        }
+      }
+    }
+
+    .remain-box {
+      text-align: start;
+      margin-top: 40px;
+      background-color: v.$primary;
+      border: 1px solid #64acff;
+      border-radius: 5px;
+      padding: 25px 18px;
+
+      p {
+        font-weight: 500;
+
+        + p {
+          margin-top: 10px;
+        }
+
+        span {
+          &.point {
+            color: #007bff;
+          }
+        }
+      }
+    }
+  }
+
+  .admin-home {
+    height: 100%;
+    text-align: center;
+    padding: 0 20px;
+    padding-bottom: 50px;
+
+    .main-title {
+      padding-top: 40px;
+      margin-bottom: 40px;
+      font-size: 30px;
+      color: v.$second;
+    }
+
+    .remain-box {
+      text-align: start;
+      margin-top: 40px;
+      background-color: v.$primary;
+      border: 1px solid #64acff;
+      border-radius: 5px;
+      padding: 25px 18px;
+
+      p {
+        font-weight: 500;
+
+        + p {
+          margin-top: 10px;
+        }
+
+        span {
+          &.point {
+            color: #007bff;
+          }
+        }
+      }
+    }
+  }
+
   .flex {
     display: flex;
 
     &.sb {
       justify-content: space-between;
     }
+  }
+}
+
+.table {
+  margin-top: 20px;
+  width: 100%;
+
+  .table-top {
+    margin-bottom: 10px;
+    text-align: start;
+  }
+
+  .table-bottom {
+    margin: 15px 0;
+  }
+
+  table {
+    width: 100%;
+    border: 1px solid #dddddd;
+
+    tbody {
+      tr {
+        text-align: start;
+
+        th {
+          text-align: start;
+          padding: 10px;
+          border-right: 1px solid #dddddd;
+          background-color: #f2f2f2;
+        }
+
+        td {
+          padding: 10px;
+          font-weight: 400;
+
+          input {
+            height: 28px;
+            font-size: 18px;
+            padding: 5px;
+
+            &.middle {
+              width: 150px;
+            }
+          }
+
+          button {
+            margin-left: 5px;
+            height: 30px;
+            font-size: 14px;
+            padding: 5px 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.button {
+  padding: 10px 15px;
+  color: v.$white;
+  border-radius: 5px;
+  background-color: #4e4e4e;
+
+  &.black {
+    background-color: #4e4e4e;
+  }
+
+  &.gray {
+    background-color: #f2f2f2;
+    color: v.$black;
+    width: 80px;
   }
 }
 
@@ -439,6 +645,7 @@
     text-align: center;
     background: url('@/assets/images/ico-alert-warning.svg')
       no-repeat top 47px center;
+
     .inner {
       width: 100%;
       padding: 122px 0 0 !important;
@@ -455,10 +662,12 @@
       padding: 0 20px;
       line-height: 26px;
       font-size: 16px;
+      font-family: f.$SR;
     }
 
     .btn-area {
       margin-top: 30px;
+      display: flex;
       flex-wrap: nowrap;
       gap: 0;
 
@@ -467,6 +676,11 @@
         min-width: 150px !important;
         height: 50px;
         border-radius: 0;
+        color: v.$black;
+
+        &.primary {
+          background-color: v.$primary;
+        }
 
         + .btn {
           margin-left: 0;
@@ -507,7 +721,6 @@
     border-top-right-radius: 10px;
     border-bottom: 1px solid #e0e0e0;
     background-color: v.$primary;
-    color: v.$white;
 
     .title {
       height: 50px;
@@ -558,7 +771,7 @@
     right: 14px;
     width: 28px;
     height: 28px;
-    background: url('@/assets/images/ico-close-white.svg')
+    background: url('@/assets/images/icon-close.svg')
       no-repeat center;
     background-size: cover;
   }
@@ -573,4 +786,42 @@
   width: 100%;
   height: 100vh !important;
   background: rgba($color: v.$black, $alpha: 0.8);
+}
+
+.change-point {
+  .input-area {
+    div {
+      &.contents {
+        margin-top: 5px;
+        margin-left: 20px;
+
+        input {
+          height: 28px;
+          font-size: 18px;
+          padding: 5px;
+        }
+      }
+    }
+
+    + .input-area {
+      margin-top: 15px;
+    }
+  }
+
+  .modal-button-area {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+select {
+  width: 100px;
+  height: 34px;
+  background-color: #f2f2f2;
+  border-color: #dddddd;
+  font-size: 15px;
+  font-family: f.$SR;
+  padding: 0 8px;
+  color: v.$black;
 }

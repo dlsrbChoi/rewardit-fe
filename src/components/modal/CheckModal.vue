@@ -7,7 +7,7 @@
           <article class="btn-area">
             <button
               ref="checkRef"
-              class="btn purple"
+              class="btn primary"
               @mouseup="initModal"
               @keyup.enter="initModal"
             >
