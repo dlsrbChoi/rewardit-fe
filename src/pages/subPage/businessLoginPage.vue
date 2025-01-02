@@ -15,13 +15,13 @@
         <div class="input-area">
           <div class="title">아이디</div>
           <div class="contents">
-            <input type="text" />
+            <input type="text" v-model="login.loginId" />
           </div>
         </div>
         <div class="input-area">
           <div class="title">비밀번호</div>
           <div class="contents">
-            <input type="password" />
+            <input type="password" v-model="login.password" />
           </div>
         </div>
         <div class="login-button-area">
@@ -46,4 +46,23 @@
   </div>
 </template>
 
-<script></script>
+<script>
+export default {
+  data() {
+    return {
+      login: {
+        loginId: '',
+        password: '',
+      }
+    }
+  },
+
+  methods: {
+    async loginBusiness() {
+      const res = await api.loginBusiness(this.login);
+
+      console.log(res);
+    }
+  }
+}
+</script>

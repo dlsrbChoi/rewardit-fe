@@ -16,7 +16,7 @@
     </div>
     <div class="remain-box">
       <p>요청가능 금액 : <span class="point">0</span> 원</p>
-      <p>지급된 금액 : <span class="point">0</span> 원</p>
+      <p>지급된 금액 : <span class="point">{{ $gFunc.comma(info.usedPoint) }}</span> 원</p>
     </div>
     <div class="table">
       <table>
@@ -27,25 +27,62 @@
           <col style="width: 30%; min-width: 120px" />
           <col style="width: auto" />
         </colgroup>
-        <tbody>
+        <tbody v-for="item in items" :key="item.id">
           <tr>
             <th>광고종류</th>
-            <td>회원가입 적립</td>
+            <td>{{item.adsType}}</td>
           </tr>
           <tr>
             <th>이벤트 명</th>
-            <td>회원가입</td>
+            <td>{{item.eventName}}</td>
           </tr>
           <tr>
             <th>발생 포인트</th>
-            <td>2,000</td>
+            <td>{{$gFunc.comma(item.reward)}}</td>
           </tr>
           <tr>
             <th>승인일시</th>
-            <td>2024-12-31</td>
+            <td>{{$gFunc.dateFormat(item.acceptedAt)}}</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 </template>
+
+<script>
+import api from '@/api/api';
+
+export default {
+  data() {
+    return {
+      info: {},
+      items: [],
+    }
+  },
+
+  created() {
+    this.getMemberInfo();
+  },
+
+  methods: {
+    async getMemberInfo() {
+      const res = await api.getMemberInfo();
+      console.log(res);
+      this.info = res?.data ?? {};
+      // TODO: 요청가능한 포인트      
+    },
+    
+    async getRewardHistory() {
+      const params = {
+        page: this.page,
+        perPage: this.perPage,
+      };
+
+      const res = await api.getRewardHistory(params);
+
+      this.items = res?.data?.items ?? [];
+    }
+  }
+}
+</script>
