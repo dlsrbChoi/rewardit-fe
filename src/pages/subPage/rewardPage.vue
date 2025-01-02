@@ -5,13 +5,22 @@
     </div>
     <div class="tab-menu">
       <ul>
-        <li :class="{ active: adsSubCate === '1' }">
+        <li
+          :class="{ active: adsSubCate === '1' }"
+          @click="changeCategory('1')"
+        >
           30초<br />광고
         </li>
-        <li :class="{ active: adsSubCate === '2' }">
+        <li
+          :class="{ active: adsSubCate === '2' }"
+          @click="changeCategory('2')"
+        >
           참여형<br />광고
         </li>
-        <li :class="{ active: adsSubCate === '3' }">
+        <li
+          :class="{ active: adsSubCate === '3' }"
+          @click="changeCategory('3')"
+        >
           SNS 구독<br />광고
         </li>
       </ul>
@@ -59,8 +68,13 @@
           </div>
         </div>
       </div>
+      <v-pagination
+        v-model="page"
+        rounded="circle"
+        :length="5"
+        :total-visible="5"
+      />
     </div>
-    <!-- TODO: 페이지네이션 -->
   </div>
 
   <CampaignExplainModal v-if="isCampaignExplain">
@@ -117,13 +131,12 @@ export default {
 
   watch: {
     adsSubCate() {
-      switch (this.adsSubCate) {
-        case '1':
-          this.adsSubTitle = '30초 광고';
-        case '2':
-          this.adsSubTitle = '참여형 광고';
-        case '3':
-          this.adsSubTitle = 'SNS 구독 광고';
+      if (this.adsSubCate === '1') {
+        this.adsSubTitle = '30초 광고';
+      } else if (this.adsSubCate === '2') {
+        this.adsSubTitle = '참여형 광고';
+      } else {
+        this.adsSubTitle = 'SNS 구독 광고';
       }
     },
   },
@@ -144,6 +157,10 @@ export default {
       console.log(res);
 
       this.items = res?.data?.items ?? [];
+    },
+
+    changeCategory(cate) {
+      this.adsSubCate = cate;
     },
 
     showModal() {

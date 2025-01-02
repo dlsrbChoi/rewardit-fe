@@ -21,7 +21,10 @@
         <div class="input-area">
           <div class="title">비밀번호</div>
           <div class="contents">
-            <input type="password" v-model="login.password" />
+            <input
+              type="password"
+              v-model="login.password"
+            />
           </div>
         </div>
         <div class="login-button-area">
@@ -53,8 +56,8 @@ export default {
       login: {
         loginId: '',
         password: '',
-      }
-    }
+      },
+    };
   },
 
   methods: {
@@ -62,7 +65,7 @@ export default {
       const res = await api.loginBusiness(this.login);
 
       console.log(res);
-    }
-  }
-}
+    },
+  },
+};
 </script>

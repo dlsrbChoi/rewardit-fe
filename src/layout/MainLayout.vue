@@ -4,8 +4,10 @@
     <RouterView />
   </div>
   <div v-else id="sub">
-    <GnbArea />
-    <RouterView />
+    <v-app>
+      <GnbArea />
+      <RouterView />
+    </v-app>
   </div>
 
   <CheckModal v-if="alertType === 'check'" />
@@ -33,8 +35,6 @@ export default {
     },
   },
 
-  created() {
-    console.log(this.$store.state);
-  },
+  created() {},
 };
 </script>

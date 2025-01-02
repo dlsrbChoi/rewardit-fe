@@ -25,16 +25,16 @@
     </div>
   </div>
   <div class="half-menu scroll" v-if="isTerms">
-    <loginTerms />
+    <LoginTerms />
   </div>
 </template>
 
 <script>
-import loginTerms from '@/components/terms/loginTerms.vue';
+import LoginTerms from '@/components/terms/LoginTerms.vue';
 
 export default {
   components: {
-    loginTerms,
+    LoginTerms,
   },
 
   data() {
