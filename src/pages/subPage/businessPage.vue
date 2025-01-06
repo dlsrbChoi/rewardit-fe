@@ -9,57 +9,70 @@
     </div>
     <div class="table">
       <div class="table-top">
+        <!-- TODO: DATE MONTH PICKER -->
         <select>
           <option>1 월</option>
           <option>2 월</option>
         </select>
       </div>
-      <table>
-        <caption>
-          사장님페이지 테이블
-        </caption>
-        <colgroup>
-          <col style="width: 30%; min-width: 120px" />
-          <col style="width: auto" />
-        </colgroup>
-        <tbody>
-          <tr>
-            <th>번호</th>
-            <td>1</td>
-          </tr>
-          <tr>
-            <th>요청시간</th>
-            <td>12-30 13:00</td>
-          </tr>
-          <tr>
-            <th>요청회원명</th>
-            <td>서하늘</td>
-          </tr>
-          <tr>
-            <th>요청금액</th>
-            <td>10,000</td>
-          </tr>
-          <tr>
-            <th>승인대기</th>
-            <td>
-              대기중
-              <button
-                type="button"
-                class="button black"
-                @click="showModal"
-              >
-                승인하기
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <th>승인확인</th>
-            <td>승인완료</td>
-          </tr>
-        </tbody>
-      </table>
+      <v-data-table
+        caption="사장님페이지 테이블"
+        no-data-text="결과가 없습니다."
+        class="table vuetify-table responsive"
+        loading-text="데이터 로딩중입니다... 잠시만 기다려주세요."
+        :loading="isLoading"
+        :headers="headers"
+        :items="items"
+        :page="page"
+        :items-per-page="perPage"
+        @page-count="pageCount = $event"
+      >
+        <template #colgroup>
+          <caption>
+            사장님페이지 테이블
+          </caption>
+        </template>
+        <template #[`item.requestedAt`]="{ item }">
+          <div class="th">요청일시</div>
+          <div class="td">
+            {{ item.requestedAt }}
+          </div>
+        </template>
+        <template #[`item.memberName`]="{ item }">
+          <div class="th">요청회원명</div>
+          <div class="td">
+            {{ item.memberName }}
+          </div>
+        </template>
+        <template #[`item.usePoint`]="{ item }">
+          <div class="th">요청포인트</div>
+          <div class="td">
+            {{ $gFunc.comma(item.usePoint) }}
+          </div>
+        </template>
+        <template #[`item.status`]="{ item }">
+          <div class="th">상태</div>
+          <div class="td">
+            {{ item.status }}
+          </div>
+        </template>
+      </v-data-table>
+      <v-pagination
+        v-model="page"
+        rounded="circle"
+        :length="5"
+        :total-visible="5"
+      />
     </div>
   </div>
+
+  <!-- <button
+    type="button"
+    class="button black"
+    @click="showModal"
+  >
+    승인하기
+  </button> -->
 </template>
 
 <script>
@@ -67,7 +80,53 @@ import openModal from '@/util/modalSetter';
 
 export default {
   data() {
-    return {};
+    return {
+      page: 1,
+      perPage: 10,
+      totalCount: 0,
+      headers: [
+        {
+          title: '요청일시',
+          key: 'requestedAt',
+          align: 'center',
+          sortable: false,
+        },
+        {
+          title: '요청회원명',
+          key: 'memberName',
+          align: 'center',
+          sortable: false,
+        },
+        {
+          title: '요청포인트',
+          key: 'requestPoint',
+          align: 'center',
+          sortable: false,
+        },
+        {
+          title: '상태',
+          key: 'status',
+          align: 'center',
+          sortable: false,
+        },
+      ],
+      items: [
+        {
+          requestedAt: '2025-01-01',
+          memberName: '김OO',
+          usePoint: 1000,
+          status: '사용 완료',
+        },
+        {
+          requestedAt: '2025-01-01',
+          memberName: '박OO',
+          usePoint: 5000,
+          status: '미사용',
+        },
+      ],
+
+      isLoading: false,
+    };
   },
 
   methods: {

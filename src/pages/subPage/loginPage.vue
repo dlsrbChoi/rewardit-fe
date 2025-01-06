@@ -15,7 +15,7 @@
       <div class="button-area">
         <button
           type="button"
-          id="G_OAuth_button"
+          id="G_OAuth_btn"
           class="login-button"
           @click="handleGoogleLogin"
         >
@@ -35,47 +35,60 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {};
   },
 
-  mounted() {
-    // this.initializeGoogleLogin();
-  },
-
   methods: {
-    initializeGoogleLogin() {
-      window.gapi.load('auth2', () => {
-        window.gapi.auth2.init({
+    handleGoogleLogin() {
+      const client = google.accounts.oauth2.initTokenClient(
+        {
           client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-        });
-      });
+          scope: 'openid email profile',
+          callback: this.googleCallback,
+        },
+      );
+
+      client.requestAccessToken();
     },
 
-    async handleGoogleLogin() {
-      this.$router.push('/reward');
+    googleCallback(res) {
+      fetch(
+        'https://www.googleapis.com/oauth2/v3/userinfo',
+        {
+          headers: {
+            Authorization: `Bearer ${res.access_token}`,
+          },
+        },
+      )
+        .then(response => response.json())
+        .then(userInfo => {
+          this.checkUserInfo(userInfo);
+        });
+    },
 
-      // try {
-      //   const auth2 = window.gapi.auth2.getAuthInstance();
-      //   const googleUser = await auth2.signIn();
+    async checkUserInfo(userInfo) {
+      const params = {
+        email: userInfo.email,
+        name: userInfo.name,
+      };
 
-      //   // 로그인 성공 시 처리
-      //   const profile = googleUser.getBasicProfile();
-      //   // const token = googleUser.getAuthResponse().id_token;
+      const res = await axios.post(
+        '/api/member/google/exists',
+        params,
+      );
 
-      //   console.log('로그인 성공');
-      //   console.log('사용자 이름:', profile.getName());
-      //   console.log('사용자 이메일:', profile.getEmail());
+      console.log(res);
 
-      //   // 서버로 토큰을 전송하여 유효성 검증
-      //   // 예시:
-      //   // await axios.post('/api/auth/google', { token });
-      //   // 로그인 후 후속 작업을 처리할 수 있습니다.
-      // } catch (error) {
-      //   // 로그인 실패 시 처리
-      //   console.error('구글 로그인 실패:', error);
-      // }
+      if (!res?.data?.data) {
+        this.$router.push({
+          path: '/agreement',
+          query: params,
+        });
+      }
     },
   },
 };

@@ -84,6 +84,10 @@ li {
   list-style-type: none;
 }
 
+select {
+  -webkit-appearance: auto;
+}
+
 body,
 html {
   width: 100%;

@@ -28,6 +28,7 @@ const routes = [
       import(
         /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/agreementPage.vue'
       ),
+     props: true
   },
   {
     path: '/reward',
@@ -47,20 +48,20 @@ const routes = [
   },
   {
     path: '/mypage/qr-code',
-    name: 'QRcodeHistoryPage',
+    name: 'qrcodeHistoryPage',
     component: () =>
       import(
-        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/QRcodeHistoryPage.vue'
+        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/qrcodeHistoryPage.vue'
       ),
   },
-  {
-    path: '/mypage/qr-code/use',
-    name: 'QRcodeUsePage',
-    component: () =>
-      import(
-        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/QRcodeUsePage.vue'
-      ),
-  },
+  // {
+  //   path: '/mypage/qr-code/use',
+  //   name: 'qrcodeUsePage',
+  //   component: () =>
+  //     import(
+  //       /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/qrcodeUsePage.vue'
+  //     ),
+  // },
   {
     path: '/admin',
     name: 'adminPage',

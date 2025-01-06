@@ -15,8 +15,20 @@
       </ul>
     </div>
     <div class="remain-box">
-      <p>요청가능 금액 : <span class="point">0</span> 원</p>
-      <p>지급된 금액 : <span class="point">0</span> 원</p>
+      <p>
+        요청가능 금액 :
+        <span class="point">
+          {{ $gFunc.comma(info?.rewardPoint ?? 0) }}
+        </span>
+        원
+      </p>
+      <p>
+        지급된 금액 :
+        <span class="point">
+          {{ $gFunc.comma(info?.usedPoint ?? 0) }}
+        </span>
+        원
+      </p>
     </div>
     <div class="table">
       <table>
@@ -48,3 +60,33 @@
     </div>
   </div>
 </template>
+
+<script>
+import api from '@/api';
+
+export default {
+  data() {
+    return {
+      info: {},
+    };
+  },
+
+  computed: {
+    pageCount() {
+      return Math.ceil(this.totalCount / this.perPage);
+    },
+  },
+
+  created() {
+    // this.getMemberInfo();
+  },
+
+  methods: {
+    async getMemberInfo() {
+      const res = await api.getMemberInfo();
+      console.log(res);
+      this.info = res?.data?.data ?? {};
+    },
+  },
+};
+</script>

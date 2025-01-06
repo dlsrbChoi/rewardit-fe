@@ -15,7 +15,10 @@
         <div class="input-area">
           <div class="title">아이디</div>
           <div class="contents">
-            <input type="text" v-model="login.loginId" />
+            <input
+              type="text"
+              v-model.trim="login.loginId"
+            />
           </div>
         </div>
         <div class="input-area">
@@ -23,7 +26,7 @@
           <div class="contents">
             <input
               type="password"
-              v-model="login.password"
+              v-model.trim="login.password"
             />
           </div>
         </div>

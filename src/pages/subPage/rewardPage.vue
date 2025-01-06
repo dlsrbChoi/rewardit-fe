@@ -6,20 +6,22 @@
     <div class="tab-menu">
       <ul>
         <li
-          :class="{ active: adsSubCate === '1' }"
-          @click="changeCategory('1')"
+          :class="{ active: adsSubCate === 'SECOND_30' }"
+          @click="changeCategory('SECOND_30')"
         >
           30초<br />광고
         </li>
         <li
-          :class="{ active: adsSubCate === '2' }"
-          @click="changeCategory('2')"
+          :class="{ active: adsSubCate === 'PARTICIPATE' }"
+          @click="changeCategory('PARTICIPATE')"
         >
           참여형<br />광고
         </li>
         <li
-          :class="{ active: adsSubCate === '3' }"
-          @click="changeCategory('3')"
+          :class="{
+            active: adsSubCate === 'SNS_SUBSCRIBE',
+          }"
+          @click="changeCategory('SNS_SUBSCRIBE')"
         >
           SNS 구독<br />광고
         </li>
@@ -57,7 +59,10 @@
           <div class="result-area">
             <div class="possible-area">
               <p>재참여 가능 여부</p>
-              <p>{{ item.adsReParticipate }}</p>
+              <p v-if="item.adsReParticipate === 'Y'">
+                가능
+              </p>
+              <p v-else>불가능</p>
             </div>
             <div class="reward-area">
               <span>케이뱅크 (신규 회원가입)</span>
@@ -80,7 +85,7 @@
   <CampaignExplainModal v-if="isCampaignExplain">
     <template #info>캠페인 참여 설명</template>
     <template #content>
-      <div>{{ selected.adsSummary }}</div>
+      <pre v-html="selected.adsSummary" />
     </template>
     <template #button>
       <button class="btn closeBtn" @click="closeModal">
@@ -92,7 +97,7 @@
   <CampaignConditionModal v-if="isCampaignCondition">
     <template #info>캠페인 참여 조건</template>
     <template #content>
-      <div>{{ selected.adsCondition }}</div>
+      <pre v-html="selected.adsCondition" />
     </template>
     <template #button>
       <button class="btn closeBtn" @click="closeModal">
@@ -105,8 +110,9 @@
 <script>
 import CampaignExplainModal from '@/components/modal/ContentsModal.vue';
 import CampaignConditionModal from '@/components/modal/ContentsModal.vue';
-import api from '@/api/api';
+// import api from '@/api';
 import openModal from '@/util/modalSetter';
+import api from '@/api';
 
 export default {
   components: {
@@ -118,7 +124,7 @@ export default {
     return {
       page: 1,
       perPage: 10,
-      adsSubCate: '1',
+      adsSubCate: 'SECOND_30',
       adsSubTitle: '30초 광고',
 
       items: [],
@@ -131,13 +137,15 @@ export default {
 
   watch: {
     adsSubCate() {
-      if (this.adsSubCate === '1') {
+      if (this.adsSubCate === 'SECOND_30') {
         this.adsSubTitle = '30초 광고';
-      } else if (this.adsSubCate === '2') {
+      } else if (this.adsSubCate === 'PARTICIPATE') {
         this.adsSubTitle = '참여형 광고';
       } else {
         this.adsSubTitle = 'SNS 구독 광고';
       }
+
+      this.getCampaignList();
     },
   },
 
@@ -156,7 +164,8 @@ export default {
       const res = await api.getCampaignList(params);
       console.log(res);
 
-      this.items = res?.data?.items ?? [];
+      this.items = res?.data?.data?.items ?? [];
+      console.log(this.items);
     },
 
     changeCategory(cate) {

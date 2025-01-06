@@ -13,12 +13,9 @@
       </div>
       <div class="button-area">
         <button type="button" @click="showTerms">
-          약관보기
+          약관확인
         </button>
-        <button
-          type="button"
-          @click="$router.push('/reward')"
-        >
+        <button type="button" @click="hadleLoginSucess">
           동의하기
         </button>
       </div>
@@ -31,6 +28,8 @@
 
 <script>
 import LoginTerms from '@/components/terms/LoginTerms.vue';
+import openModal from '@/util/modalSetter';
+import api from '@/api';
 
 export default {
   components: {
@@ -40,12 +39,29 @@ export default {
   data() {
     return {
       isTerms: false,
+      userInfo: {},
     };
+  },
+
+  created() {
+    console.log(this.$route.query);
+
+    this.userInfo = this.$route.query;
   },
 
   methods: {
     showTerms() {
       this.isTerms = true;
+    },
+
+    async hadleLoginSucess() {
+      if (!this.isTerms) {
+        openModal('약관을 확인해주세요.', 'warning');
+        return;
+      }
+
+      const res = await api.googleLogin(this.userInfo);
+      console.log(res);
     },
   },
 };
