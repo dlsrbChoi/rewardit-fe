@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/api/api';
 
 export default {
   data() {
@@ -76,19 +76,22 @@ export default {
         name: userInfo.name,
       };
 
-      const res = await axios.post(
-        '/api/member/google/exists',
-        params,
-      );
-
-      console.log(res);
+      const res = await api.checkMember(params);
 
       if (!res?.data?.data) {
         this.$router.push({
           path: '/agreement',
           query: params,
         });
+        return;
       }
+
+      const loginRes = await api.googleLogin(params);
+
+      const tokenObj = loginRes?.data?.data ?? {};
+      await this.$store.dispatch('setTokens', tokenObj);
+      await this.$store.dispatch('setUsers', userInfo);
+      this.$router.push('/reward');
     },
   },
 };

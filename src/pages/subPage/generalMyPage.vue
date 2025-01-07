@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import api from '@/api';
+import api from '@/api/api';
 
 export default {
   data() {
@@ -144,7 +144,7 @@ export default {
   },
 
   created() {
-    // this.getMemberInfo();
+    this.getMemberInfo();
   },
 
   methods: {

@@ -110,9 +110,8 @@
 <script>
 import CampaignExplainModal from '@/components/modal/ContentsModal.vue';
 import CampaignConditionModal from '@/components/modal/ContentsModal.vue';
-// import api from '@/api';
 import openModal from '@/util/modalSetter';
-import api from '@/api';
+import api from '@/api/api';
 
 export default {
   components: {

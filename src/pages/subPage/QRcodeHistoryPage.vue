@@ -119,7 +119,7 @@
 
 <script>
 import QRCodeChangeModal from '@/components/modal/ContentsModal.vue';
-import api from '@/api';
+import api from '@/api/api';
 
 export default {
   components: {

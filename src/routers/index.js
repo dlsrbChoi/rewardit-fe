@@ -1,4 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import store from '@/store';
+import openModal from '@/util/modalSetter';
+
+const loadView = view => {
+  return () =>
+    import(
+      /* webpackChunkName: "view-[request]" */ `@/pages/subpage/${view}.vue`
+    );
+};
 
 const routes = [
   {
@@ -7,7 +16,7 @@ const routes = [
   },
   {
     path: '/main',
-    name: 'main',
+    name: 'main',    
     component: () =>
       import(
         /* webpackChunkName: "view-main-vue" */ '@/pages/mainpage/mainPage.vue'
@@ -16,75 +25,63 @@ const routes = [
   {
     path: '/login',
     name: 'loginPage',
-    component: () =>
-      import(
-        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/loginPage.vue'
-      ),
+    component: loadView('loginPage'),
   },
   {
     path: '/agreement',
     name: 'agreementPage',
-    component: () =>
-      import(
-        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/agreementPage.vue'
-      ),
-     props: true
+    component: loadView('agreementPage'),
+    props: true,
   },
   {
     path: '/reward',
     name: 'rewardPage',
-    component: () =>
-      import(
-        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/rewardPage.vue'
-      ),
+    component: loadView('rewardPage'),
+    meta: {
+      isAuth: true,
+    }
   },
   {
     path: '/mypage',
     name: 'generalMyPage',
-    component: () =>
-      import(
-        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/generalMyPage.vue'
-      ),
+    component: loadView('generalMyPage'),
+    meta: {
+      isAuth: true,
+    }
   },
   {
     path: '/mypage/qr-code',
     name: 'qrcodeHistoryPage',
-    component: () =>
-      import(
-        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/qrcodeHistoryPage.vue'
-      ),
+    component: loadView('qrcodeHistoryPage'),
+    meta: {
+      isAuth: true,
+    }
   },
   // {
   //   path: '/mypage/qr-code/use',
   //   name: 'qrcodeUsePage',
-  //   component: () =>
-  //     import(
-  //       /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/qrcodeUsePage.vue'
-  //     ),
+  //   component: loadView('qrcodeUsePage'),
   // },
   {
     path: '/admin',
     name: 'adminPage',
-    component: () =>
-      import(
-        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/adminPage.vue'
-      ),
+    component: loadView('adminPage'),
+    meta: {
+      isAuth: true,
+    }
   },
   {
     path: '/login/business',
     name: 'businessLoginPage',
-    component: () =>
-      import(
-        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/businessLoginPage.vue'
-      ),
+    component: loadView('businessLoginPage'),
   },
   {
     path: '/business',
     name: 'businessPage',
-    component: () =>
-      import(
-        /* webpackChunkName: "view-main-vue" */ '@/pages/subPage/businessPage.vue'
-      ),
+    component: loadView('businessPage'),
+    meta: {
+      isAuth: true,
+    }
   },  
 ];
 
@@ -106,6 +103,19 @@ function scrollBehavior(to, from, savedPosition) {
 
 router.afterEach((to, from) => {
   window.scrollTo(scrollBehavior(to, from, null));
+});
+
+router.beforeEach((to, from, next) => {
+  const isLogin = store.state.userStore.isLogin;
+  const meta = to.meta;
+
+  if (meta.isAuth && !isLogin) {
+    openModal('로그인이 필요합니다.', 'warning');
+    next('/login');
+    return;
+  }
+
+  next();
 });
 
 export default router;

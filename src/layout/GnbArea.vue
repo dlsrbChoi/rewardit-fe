@@ -1,9 +1,7 @@
 <template>
   <header id="nav">
     <div class="header">
-      <div class="logo" @click="$router.push('/reward')">
-        Rewardit
-      </div>
+      <div class="logo" @click="moveLogoSite">Rewardit</div>
       <div class="nav-button-area">
         <button
           v-if="$route.name === 'main'"
@@ -12,6 +10,7 @@
         >
           로그인
         </button>
+        <div v-else-if="!isLogin"></div>
         <div v-else>
           <button
             v-if="!isMenuShow"
@@ -22,7 +21,7 @@
             <span class="hidden">메뉴</span>
           </button>
           <button
-            v-if="isMenuShow"
+            v-else
             type="button"
             class="closeMenu"
             @click="changeShowMenu"
@@ -34,9 +33,13 @@
       <div v-if="isMenuShow" class="menu-bar">
         <div v-if="isLogin" class="user-area">
           <p>
-            안녕하세요. <span class="bold">김동환</span>님
+            안녕하세요.
+            <span class="bold">{{ userName }}</span
+            >님
           </p>
-          <button type="button">로그아웃</button>
+          <button type="button" @click="handleLogout">
+            로그아웃
+          </button>
         </div>
         <ul>
           <li @click="$router.push('/mypage')">
@@ -59,6 +62,8 @@
 </template>
 
 <script>
+import openModal from '@/util/modalSetter';
+
 export default {
   data() {
     return {
@@ -67,8 +72,12 @@ export default {
   },
 
   computed: {
+    userName() {
+      return this.$store.state.userStore?.name ?? '';
+    },
+
     isLogin() {
-      return true;
+      return this.$store.state.userStore?.isLogin ?? false;
     },
   },
 
@@ -81,6 +90,20 @@ export default {
   methods: {
     changeShowMenu() {
       this.isMenuShow = !this.isMenuShow;
+    },
+
+    moveLogoSite() {
+      if (!this.isLogin) {
+        this.$router.push('/main');
+        return;
+      }
+
+      this.$router.push('/reward');
+    },
+
+    async handleLogout() {
+      await this.$store.dispatch('clearTokens');
+      openModal('로그아웃 되었습니다.', 'check', '/main');
     },
   },
 };

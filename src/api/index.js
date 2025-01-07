@@ -1,78 +1,72 @@
 import axios from "axios";
+import userStore from "@/store/modules/userStore";
+import store from "@/store";
 
-export default {
-  /* CAMPAIGN */
-  // 캠페인 목록 조회
-  getCampaignList(params) {
-    return axios.get('/api/campaign', { params });
-  },
+const instance = axios.create({
+  headers: {
+    'Content-Type': 'application/json',
+  }
+});
 
-  // 캠페인 참여 요청
-  getCampaignJoin(url, params) {
-    return axios.get(url, { params });
-  },
+const refreshToken = async () => {
+  const refreshToken = store.state.userStore.refreshToken;
+  if (!refreshToken) {
+    throw new Error('No refresh token available');
+  }
 
-  /* MEMBER */
-  // 구글 회원 존재 여부
-  checkMember(params) {
-    return axios.post('/api/member/google/exists', params)
-  },
+  try {
+    const res = await axios.get('/api/member/refresh');
+    const newAccessToken = res.data.data.accessToken;
 
-  // 구글 로그인
-  googleLogin(params) {
-    return axios.post('/api/member/google/login', params)
-  },
+    userStore.dispatch('setTokens', {
+      accessToken: newAccessToken,
+      refreshToken,
+    });
 
-  // refresh 토큰
-  refreshToken() {
-    return axios.get('/api/member/refresh');
-  },
+    return newAccessToken;
+  } catch (error) {
+    userStore.dispatch('clearTokens');
+    throw error;
+  }
+}
 
-  // 회원 정보 조회
-  getMemberInfo() {
-    return axios.get('/api/member')
-  },
+instance.interceptors.request.use(
+  (config) => {
+    const token = store.state.userStore.accessToken 
 
-  /* REWARD */
-  // 리워드 기록 목록 조회
-  getRewardHistory(params) {
-    return axios.get('/api/reward', { params });
-  },
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
 
-  /* QR CODE */
-  // 포인트 QR 코드 생성
-  generateQrcode(params) {
-    return axios.post('/api/qr/generate', params)
+    return config;
   },
+  (error) => Promise.reject(error)
+);
 
-  // 포인트 사용 QR 조회
-  getQrcode(qrId) {
-    return axios.get(`/api/qr/${qrId}`);
-  },
+instance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-  // QR 사용 처리
-  useQrcode(qrId) {
-    return axios.post(`/api/qr/use/${qrId}`)
-  },
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
 
-  // QR 사용 목록 조회
-  getQrcodeHistory(params) {
-    return axios.get('/api/qr', { params })
-  },
+      try {
+        const newAccessToken = await refreshToken();
+        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
 
-  /* SHOP */
-  // 사업자 로그인
-  loginBusiness(params) {
-    return axios.post('/api/shop/login', params)
-  },
+        return instance(originalRequest);
+      } catch (refreshError) {
+        console.error('Failed to refresh token:', refreshError);
 
-  // QR 가맹점 연결
-  useQRcodeWithBusiness(qrId) {
-    return axios.post(`/api/shop/use-request/${qrId}`)
-  },
+        return Promise.reject(refreshError);
+      }
+    }
+    return Promise.reject(error);
+  }
+)
 
-  // QR 사용 요청 조회
-  getQRcodeUseHistory(params) {
-    return axios.get('/api/shop/use-request', { params })
-  },
-};
+export default instance;
+
+
+
