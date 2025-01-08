@@ -60,7 +60,7 @@
         <template #[`item.requestAt`]="{ item }">
           <div class="th">요청일시</div>
           <div class="td">
-            {{ item.requestAt }}
+            {{ $gFunc.dateFormat(item.requestAt) }}
           </div>
         </template>
         <template #[`item.requestPoint`]="{ item }">
@@ -77,9 +77,9 @@
         </template>
       </v-data-table>
       <v-pagination
-        v-model="page"
         rounded="circle"
-        :length="5"
+        v-model="page"
+        :length="totalPage"
         :total-visible="5"
       />
     </div>
@@ -99,11 +99,20 @@
         <div class="input-area">
           <div class="title">교환 금액</div>
           <div class="contents">
-            <input type="tel" class="middle" />
+            <input
+              type="tel"
+              class="middle"
+              v-model="applyQr.usedPoint"
+              @input="onlyNum($event, 'usedPoint')"
+            />
           </div>
         </div>
         <div class="modal-button-area">
-          <button type="button" class="button black">
+          <button
+            type="button"
+            class="button black"
+            @click="chageQrcode"
+          >
             교환하기
           </button>
         </div>
@@ -120,6 +129,7 @@
 <script>
 import QRCodeChangeModal from '@/components/modal/ContentsModal.vue';
 import api from '@/api/api';
+import openModal from '@/util/modalSetter';
 
 export default {
   components: {
@@ -132,7 +142,7 @@ export default {
 
       page: 1,
       perPage: 10,
-      totalCount: 0,
+      totalPage: 1,
       headers: [
         {
           title: '요청일시',
@@ -153,39 +163,27 @@ export default {
           sortable: false,
         },
       ],
-      items: [
-        {
-          requestAt: '2025-01-01',
-          requestPoint: 1000,
-          status: '사용 완료',
-        },
-        {
-          requestAt: '2025-01-01',
-          requestPoint: 5000,
-          status: '미사용',
-        },
-      ],
+      items: [],
+
+      applyQr: {
+        usedPoint: null,
+      },
 
       isLoading: false,
       isQRCodeModal: false,
     };
   },
 
-  computed: {
-    pageCount() {
-      return Math.ceil(this.totalCount / this.perPage);
-    },
-  },
-
   created() {
-    // this.getMemberInfo();
-    // this.getQrcodeHistory();
+    this.getMemberInfo();
+    this.getQrcodeHistory();
   },
 
   methods: {
     async getMemberInfo() {
       const res = await api.getMemberInfo();
       console.log(res);
+
       this.info = res?.data?.data ?? {};
     },
 
@@ -196,7 +194,14 @@ export default {
       };
 
       const res = await api.getQrcodeHistory(params);
-      console.log(res);
+
+      this.items = res?.data?.data ?? {};
+    },
+
+    onlyNum(e, type) {
+      this.applyQr[type] = this.$gFunc.onlyNumber(
+        e.target.value,
+      );
     },
 
     showQRCodeChangeModal() {
@@ -205,6 +210,52 @@ export default {
 
     closeModal() {
       this.isQRCodeModal = false;
+      this.applyQr.usedPoint = null;
+    },
+
+    isValidThousandUnit(value) {
+      const number = Number(value);
+      return number >= 1000 && number % 1000 === 0;
+    },
+
+    changeValidation() {
+      if (!this.applyQr.usedPoint) {
+        openModal('교환 금액을 입력해주세요.', 'warning');
+        return false;
+      }
+
+      console.log(this.info);
+
+      if (this.info.rewardPoint < this.applyQr.usedPoint) {
+        openModal('잔여포인트가 부족합니다.', 'warning');
+        return false;
+      }
+
+      if (
+        !this.isValidThousandUnit(this.applyQr.usedPoint)
+      ) {
+        openModal('천원 단위로 교환가능합니다.', 'warning');
+        return false;
+      }
+
+      return true;
+    },
+
+    async chageQrcode() {
+      if (!this.changeValidation()) return;
+
+      const res = await api.generateQrcode(this.applyQr);
+      console.log(res);
+      if (res?.data?.result === 'FAIL') {
+        openModal(
+          '교환에 실패하였습니다.\n다시시도해주세요.',
+          'warning',
+        );
+        return;
+      }
+
+      this.closeModal();
+      openModal('교환되었습니다.', 'check');
     },
   },
 };

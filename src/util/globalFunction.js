@@ -50,8 +50,18 @@ const openUrl = url => {
   }
 };
 
+const onlyNumber = v => {
+  return v.replace(/[^\d.]/g, '').replace(/(\.*)\./g, '$1');
+};
+
+const scrollUp = () => {
+  window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+};
+
 export default {
   comma,
   dateFormat,
   openUrl,
+  onlyNumber,
+  scrollUp,
 };

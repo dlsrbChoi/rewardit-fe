@@ -83,9 +83,9 @@
         </template>
       </v-data-table>
       <v-pagination
-        v-model="page"
         rounded="circle"
-        :length="5"
+        v-model="page"
+        :length="totalPage"
         :total-visible="5"
       />
     </div>
@@ -93,14 +93,12 @@
 </template>
 
 <script>
-import openModal from '@/util/modalSetter';
-
 export default {
   data() {
     return {
       page: 1,
       perPage: 10,
-      totalCount: 0,
+      totalPage: 1,
       headers: [
         {
           title: '가게명',

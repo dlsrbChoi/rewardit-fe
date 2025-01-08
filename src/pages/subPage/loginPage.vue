@@ -42,7 +42,26 @@ export default {
     return {};
   },
 
+  computed: {
+    isLogin() {
+      return this.$store.state.userStore?.isLogin ?? false;
+    },
+  },
+
+  created() {
+    this.checkAuth();
+  },
+
   methods: {
+    checkAuth() {
+      if (this.isLogin) {
+        this.$router.push('/reward');
+        return;
+      }
+
+      this.$router.push('/login');
+    },
+
     handleGoogleLogin() {
       const client = google.accounts.oauth2.initTokenClient(
         {

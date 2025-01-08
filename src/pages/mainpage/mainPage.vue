@@ -7,7 +7,7 @@
       </p>
     </div>
     <div class="main-button">
-      <button type="button" @click="$router.push('/login')">
+      <button type="button" @click="checkAuth">
         리워딧 시작하기
       </button>
     </div>
@@ -20,4 +20,23 @@
   </div>
 </template>
 
-<script></script>
+<script>
+export default {
+  computed: {
+    isLogin() {
+      return this.$store.state.userStore?.isLogin ?? false;
+    },
+  },
+
+  methods: {
+    checkAuth() {
+      if (this.isLogin) {
+        this.$router.push('/reward');
+        return;
+      }
+
+      this.$router.push('/login');
+    },
+  },
+};
+</script>

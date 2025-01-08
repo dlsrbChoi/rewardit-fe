@@ -68,14 +68,14 @@
       <template #[`item.acceptedAt`]="{ item }">
         <div class="th">승인일시</div>
         <div class="td">
-          {{ item.acceptedAt }}
+          {{ $gFunc.dateFormat(item.acceptedAt) }}
         </div>
       </template>
     </v-data-table>
     <v-pagination
-      v-model="page"
       rounded="circle"
-      :length="5"
+      v-model="page"
+      :length="totalPage"
       :total-visible="5"
     />
   </div>
@@ -91,7 +91,7 @@ export default {
 
       page: 1,
       perPage: 10,
-      totalCount: 0,
+      totalPage: 1,
       headers: [
         {
           title: '광고종류',
@@ -118,39 +118,21 @@ export default {
           sortable: false,
         },
       ],
-      items: [
-        {
-          adsType: '참여형 광고',
-          eventName: '아이폰 당첨 이벤트',
-          reward: 1000,
-          acceptedAt: '2025-01-01',
-        },
-        {
-          adsType: '30초 광고',
-          eventName: '게임신청 이벤트',
-          reward: 50,
-          acceptedAt: '2025-01-01',
-        },
-      ],
+      items: [],
 
       isLoading: false,
     };
   },
 
-  computed: {
-    pageCount() {
-      return Math.ceil(this.totalCount / this.perPage);
-    },
-  },
-
   created() {
     this.getMemberInfo();
+    this.getRewardHistory();
   },
 
   methods: {
     async getMemberInfo() {
       const res = await api.getMemberInfo();
-      console.log(res);
+
       this.info = res?.data?.data ?? {};
     },
 
@@ -161,8 +143,10 @@ export default {
       };
 
       const res = await api.getRewardHistory(params);
+      console.log(res);
 
       this.items = res?.data?.items ?? [];
+      this.totalPage = res?.data?.total ?? 1;
     },
   },
 };

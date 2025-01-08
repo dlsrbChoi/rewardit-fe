@@ -58,9 +58,9 @@
         </template>
       </v-data-table>
       <v-pagination
-        v-model="page"
         rounded="circle"
-        :length="5"
+        v-model="page"
+        :length="totalPage"
         :total-visible="5"
       />
     </div>
@@ -83,7 +83,7 @@ export default {
     return {
       page: 1,
       perPage: 10,
-      totalCount: 0,
+      totalPage: 1,
       headers: [
         {
           title: '요청일시',

@@ -29,12 +29,24 @@
     </div>
     <div class="contents">
       <p class="page-title">{{ adsSubTitle }}</p>
+      <div v-if="!totalPage" class="no-ads">
+        <p>광고가 없습니다.</p>
+      </div>
       <div
         class="ads-card"
         v-for="item in items"
         :key="item.adsIdx"
       >
-        <img :src="item.adsFeedImg" alt="광고 썸네일" />
+        <img
+          v-if="item.adsFeedImg"
+          :src="item.adsFeedImg"
+          alt="광고 썸네일"
+        />
+        <img
+          v-else
+          src="@/assets/images/img-ads-preview-default.png"
+          alt="광고 썸네일 기본"
+        />
         <div class="text-area">
           <div
             class="text-box"
@@ -64,8 +76,11 @@
               </p>
               <p v-else>불가능</p>
             </div>
-            <div class="reward-area">
-              <span>케이뱅크 (신규 회원가입)</span>
+            <div
+              class="reward-area"
+              @click="joinCampaign(item.clickUrl)"
+            >
+              <span>Rewardit 포인트 적립</span>
               <span>
                 {{ $gFunc.comma(item.adsRewardPrice) }}원
               </span>
@@ -74,10 +89,11 @@
         </div>
       </div>
       <v-pagination
-        v-model="page"
         rounded="circle"
-        :length="5"
+        v-model="page"
+        :length="totalPage"
         :total-visible="5"
+        @click="[getCampaignList(), $gFunc.scrollUp()]"
       />
     </div>
   </div>
@@ -85,7 +101,7 @@
   <CampaignExplainModal v-if="isCampaignExplain">
     <template #info>캠페인 참여 설명</template>
     <template #content>
-      <pre v-html="selected.adsSummary" />
+      <pre v-html="decodeAdsSummary" />
     </template>
     <template #button>
       <button class="btn closeBtn" @click="closeModal">
@@ -97,7 +113,7 @@
   <CampaignConditionModal v-if="isCampaignCondition">
     <template #info>캠페인 참여 조건</template>
     <template #content>
-      <pre v-html="selected.adsCondition" />
+      <pre v-html="decodeAdsCondition" />
     </template>
     <template #button>
       <button class="btn closeBtn" @click="closeModal">
@@ -110,8 +126,8 @@
 <script>
 import CampaignExplainModal from '@/components/modal/ContentsModal.vue';
 import CampaignConditionModal from '@/components/modal/ContentsModal.vue';
-import openModal from '@/util/modalSetter';
 import api from '@/api/api';
+import openModal from '@/util/modalSetter';
 
 export default {
   components: {
@@ -121,8 +137,11 @@ export default {
 
   data() {
     return {
+      uid: null,
+
       page: 1,
       perPage: 10,
+      totalPage: 1,
       adsSubCate: 'SECOND_30',
       adsSubTitle: '30초 광고',
 
@@ -132,6 +151,20 @@ export default {
       isCampaignExplain: false,
       isCampaignCondition: false,
     };
+  },
+
+  computed: {
+    decodeAdsSummary() {
+      return this.decodeHtmlEntities(
+        this.selected.adsSummary,
+      );
+    },
+
+    decodeAdsCondition() {
+      return this.decodeHtmlEntities(
+        this.selected.adsCondition,
+      );
+    },
   },
 
   watch: {
@@ -148,11 +181,23 @@ export default {
     },
   },
 
-  created() {
-    // this.getCampaignList();
+  async created() {
+    await this.getMemberInfo();
+    this.getCampaignList();
   },
 
   methods: {
+    async getMemberInfo() {
+      const res = await api.getMemberInfo();
+
+      if (res?.data?.result === 'FAIL') {
+        openModal('로그인이 필요합니다.', 'warning');
+        return;
+      }
+
+      this.uid = res?.data?.data?.id ?? null;
+    },
+
     async getCampaignList() {
       const params = {
         page: this.page,
@@ -161,18 +206,14 @@ export default {
       };
 
       const res = await api.getCampaignList(params);
-      console.log(res);
+      console.log(res, 'res');
 
       this.items = res?.data?.data?.items ?? [];
-      console.log(this.items);
+      this.totalPage = res?.data?.data?.total ?? 1;
     },
 
     changeCategory(cate) {
       this.adsSubCate = cate;
-    },
-
-    showModal() {
-      openModal('text area', 'check');
     },
 
     showCampaignExplainModal(item) {
@@ -185,10 +226,32 @@ export default {
       this.isCampaignCondition = true;
     },
 
+    decodeHtmlEntities(value) {
+      const textarea = document.createElement('textarea');
+      textarea.innerHTML = value;
+      return textarea.value;
+    },
+
     closeModal() {
       this.selected = {};
       this.isCampaignExplain = false;
       this.isCampaignCondition = false;
+    },
+
+    async joinCampaign(url) {
+      if (!url) {
+        openModal('종료된 캠페인입니다.', 'warning');
+        return;
+      }
+
+      const res = await api.getCampaignJoin(url, this.uid);
+
+      if (res?.data?.result === 'FAIL') {
+        openModal('종료된 캠페인입니다.', 'warning');
+        return;
+      }
+
+      this.$gFunc.openUrl(url);
     },
   },
 };
