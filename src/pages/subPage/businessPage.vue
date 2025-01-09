@@ -9,11 +9,9 @@
     </div>
     <div class="table">
       <div class="table-top">
-        <!-- TODO: DATE MONTH PICKER -->
-        <select>
-          <option>1 월</option>
-          <option>2 월</option>
-        </select>
+        <YearMonthPicker
+          @updateYearMonth="updateYearMonth"
+        />
       </div>
       <v-data-table
         caption="사장님페이지 테이블"
@@ -35,7 +33,7 @@
         <template #[`item.requestedAt`]="{ item }">
           <div class="th">요청일시</div>
           <div class="td">
-            {{ item.requestedAt }}
+            {{ $gFunc.dateFormat(item.requestedAt) }}
           </div>
         </template>
         <template #[`item.memberName`]="{ item }">
@@ -53,11 +51,15 @@
         <template #[`item.status`]="{ item }">
           <div class="th">상태</div>
           <div class="td">
-            {{ item.status }}
+            <span v-if="item.status === 'USED'">
+              사용완료
+            </span>
+            <span v-else> 미사용 </span>
           </div>
         </template>
       </v-data-table>
       <v-pagination
+        v-if="totalPage"
         rounded="circle"
         v-model="page"
         :length="totalPage"
@@ -76,11 +78,20 @@
 </template>
 
 <script>
+import YearMonthPicker from '@/components/datePicker/YearMonthPicker.vue';
 import openModal from '@/util/modalSetter';
+import api from '@/api/api';
+import dayjs from 'dayjs';
 
 export default {
+  components: {
+    YearMonthPicker,
+  },
+
   data() {
     return {
+      yearMonth: dayjs().format('YYYY-MM'),
+
       page: 1,
       perPage: 10,
       totalPage: 1,
@@ -110,26 +121,37 @@ export default {
           sortable: false,
         },
       ],
-      items: [
-        {
-          requestedAt: '2025-01-01',
-          memberName: '김OO',
-          usePoint: 1000,
-          status: '사용 완료',
-        },
-        {
-          requestedAt: '2025-01-01',
-          memberName: '박OO',
-          usePoint: 5000,
-          status: '미사용',
-        },
-      ],
+      items: [],
 
       isLoading: false,
     };
   },
 
+  created() {
+    // this.getQRcodeUseHistory();
+  },
+
   methods: {
+    async getQRcodeUseHistory() {
+      this.isLoading = true;
+      const params = {
+        page: this.page,
+        perPage: this.perPage,
+        yearMonth: this.yearMonth,
+      };
+
+      const res = await api.getQRcodeUseHistory(params);
+      this.isLoading = false;
+      console.log(res);
+
+      this.items = res?.data?.data?.items ?? [];
+      this.totalPage = res?.data?.data?.total ?? 1;
+    },
+
+    updateYearMonth(yearMonth) {
+      this.yearMonth = yearMonth;
+    },
+
     showModal() {
       openModal(
         `승인하시겠습니까?`,

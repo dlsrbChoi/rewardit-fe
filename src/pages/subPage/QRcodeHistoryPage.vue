@@ -77,6 +77,7 @@
         </template>
       </v-data-table>
       <v-pagination
+        v-if="totalPage"
         rounded="circle"
         v-model="page"
         :length="totalPage"
@@ -182,7 +183,6 @@ export default {
   methods: {
     async getMemberInfo() {
       const res = await api.getMemberInfo();
-      console.log(res);
 
       this.info = res?.data?.data ?? {};
     },
@@ -195,7 +195,8 @@ export default {
 
       const res = await api.getQrcodeHistory(params);
 
-      this.items = res?.data?.data ?? {};
+      this.items = res?.data?.data?.items ?? [];
+      this.totalPage = res?.data?.data?.total ?? 1;
     },
 
     onlyNum(e, type) {
@@ -223,8 +224,6 @@ export default {
         openModal('교환 금액을 입력해주세요.', 'warning');
         return false;
       }
-
-      console.log(this.info);
 
       if (this.info.rewardPoint < this.applyQr.usedPoint) {
         openModal('잔여포인트가 부족합니다.', 'warning');

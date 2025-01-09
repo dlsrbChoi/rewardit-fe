@@ -89,6 +89,7 @@
         </div>
       </div>
       <v-pagination
+        v-if="totalPage"
         rounded="circle"
         v-model="page"
         :length="totalPage"

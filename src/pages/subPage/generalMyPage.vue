@@ -73,6 +73,7 @@
       </template>
     </v-data-table>
     <v-pagination
+      v-if="totalPage"
       rounded="circle"
       v-model="page"
       :length="totalPage"
@@ -145,8 +146,8 @@ export default {
       const res = await api.getRewardHistory(params);
       console.log(res);
 
-      this.items = res?.data?.items ?? [];
-      this.totalPage = res?.data?.total ?? 1;
+      this.items = res?.data?.data?.items ?? [];
+      this.totalPage = res?.data?.data?.total ?? 1;
     },
   },
 };

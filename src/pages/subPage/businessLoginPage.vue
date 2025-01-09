@@ -34,7 +34,8 @@
           <button
             type="button"
             class="button black"
-            @click="$router.push('/business')"
+            :disabled="isDisabled"
+            @click="loginBusiness"
           >
             로그인
           </button>
@@ -53,6 +54,8 @@
 </template>
 
 <script>
+import openModal from '@/util/modalSetter';
+
 export default {
   data() {
     return {
@@ -60,14 +63,49 @@ export default {
         loginId: '',
         password: '',
       },
+
+      isDisabled: false,
     };
   },
 
   methods: {
+    loginValidation() {
+      if (!this.login.loginId) {
+        openModal('아이디를 입력해주세요.', 'warning');
+        return false;
+      }
+
+      if (!this.login.password) {
+        openModal('비밀번호를 입력해주세요.', 'warning');
+        return false;
+      }
+
+      return true;
+    },
+
     async loginBusiness() {
+      if (!this.loginBusiness()) return;
+
+      this.isDisabled = true;
       const res = await api.loginBusiness(this.login);
 
-      console.log(res);
+      if (res?.data?.result !== 'OK') {
+        openModal(
+          '아이디 또는 비밀번호를 확인해주세요.',
+          'warning',
+        );
+        this.isDisabled = false;
+        return;
+      }
+
+      const accessToken =
+        res?.data?.data?.accessToken ?? '';
+      await this.$store.dispatch('setTokens', {
+        accessToken,
+      });
+      this.isDisabled = false;
+
+      this.$router.push('/business');
     },
   },
 };

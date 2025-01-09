@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
+    "@vuepic/vue-datepicker": "^11.0.0",
     "axios": "^1.7.8",
     "core-js": "^3.39.0",
     "dayjs": "^1.11.13",

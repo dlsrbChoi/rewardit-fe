@@ -11,10 +11,9 @@
     </div>
     <div class="table">
       <div class="table-top">
-        <select>
-          <option>1 월</option>
-          <option>2 월</option>
-        </select>
+        <YearMonthPicker
+          @updateYearMonth="updateYearMonth"
+        />
       </div>
       <v-data-table
         caption="관리자페이지 테이블"
@@ -83,6 +82,7 @@
         </template>
       </v-data-table>
       <v-pagination
+        v-if="totalPage"
         rounded="circle"
         v-model="page"
         :length="totalPage"
@@ -93,9 +93,18 @@
 </template>
 
 <script>
+import YearMonthPicker from '@/components/datePicker/YearMonthPicker.vue';
+import dayjs from 'dayjs';
+
 export default {
+  components: {
+    YearMonthPicker,
+  },
+
   data() {
     return {
+      yearMonth: dayjs().format('YYYY-MM'),
+
       page: 1,
       perPage: 10,
       totalPage: 1,
@@ -166,6 +175,10 @@ export default {
     };
   },
 
-  methods: {},
+  methods: {
+    updateYearMonth(yearMonth) {
+      this.yearMonth = yearMonth;
+    },
+  },
 };
 </script>
