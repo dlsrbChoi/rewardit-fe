@@ -8,11 +8,15 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        // target: 'http://127.0.0.1:8080',
         target: 'http://43.201.37.36:8080',
         changeOrigin: true,
         ws: false,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      '/greenp': {
+        target: 'https://api.greenp.kr',
+        changeOrigin: true,
+        ws: false,
+        rewrite: (path) => path.replace(/^\/greenp/, '')
       }
     },
   },

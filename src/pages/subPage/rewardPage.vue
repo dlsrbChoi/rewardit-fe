@@ -6,12 +6,6 @@
     <div class="tab-menu">
       <ul>
         <li
-          :class="{ active: adsSubCate === 'SECOND_30' }"
-          @click="changeCategory('SECOND_30')"
-        >
-          30초<br />광고
-        </li>
-        <li
           :class="{ active: adsSubCate === 'PARTICIPATE' }"
           @click="changeCategory('PARTICIPATE')"
         >
@@ -24,6 +18,12 @@
           @click="changeCategory('SNS_SUBSCRIBE')"
         >
           SNS 구독<br />광고
+        </li>
+        <li
+          :class="{ active: adsSubCate === 'SECOND_30' }"
+          @click="changeCategory('SECOND_30')"
+        >
+          30초<br />광고
         </li>
       </ul>
     </div>
@@ -100,9 +100,20 @@
   </div>
 
   <CampaignExplainModal v-if="isCampaignExplain">
-    <template #info>캠페인 참여 설명</template>
+    <template #info>{{ selected.adsName }}</template>
+    <template #point>
+      {{ $gFunc.comma(selected.adsRewardPrice) }}P
+    </template>
     <template #content>
       <pre v-html="decodeAdsSummary" />
+    </template>
+    <template #bottom>
+      <button
+        type="button"
+        @click="joinCampaign(selected.clickUrl)"
+      >
+        참여하기
+      </button>
     </template>
     <template #button>
       <button class="btn closeBtn" @click="closeModal">
@@ -112,9 +123,20 @@
   </CampaignExplainModal>
 
   <CampaignConditionModal v-if="isCampaignCondition">
-    <template #info>캠페인 참여 조건</template>
+    <template #info>{{ selected.adsName }}</template>
+    <template #point>
+      {{ $gFunc.comma(selected.adsRewardPrice) }}P
+    </template>
     <template #content>
       <pre v-html="decodeAdsCondition" />
+    </template>
+    <template #bottom>
+      <button
+        type="button"
+        @click="joinCampaign(selected.clickUrl)"
+      >
+        참여하기
+      </button>
     </template>
     <template #button>
       <button class="btn closeBtn" @click="closeModal">
@@ -125,8 +147,8 @@
 </template>
 
 <script>
-import CampaignExplainModal from '@/components/modal/ContentsModal.vue';
-import CampaignConditionModal from '@/components/modal/ContentsModal.vue';
+import CampaignExplainModal from '@/components/modal/RewardModal.vue';
+import CampaignConditionModal from '@/components/modal/RewardModal.vue';
 import api from '@/api/api';
 import openModal from '@/util/modalSetter';
 
@@ -142,9 +164,9 @@ export default {
 
       page: 1,
       perPage: 10,
-      totalPage: 1,
-      adsSubCate: 'SECOND_30',
-      adsSubTitle: '30초 광고',
+      totalPage: 0,
+      adsSubCate: 'PARTICIPATE',
+      adsSubTitle: '참여형 광고',
 
       items: [],
       selected: {},
@@ -207,7 +229,6 @@ export default {
       };
 
       const res = await api.getCampaignList(params);
-      console.log(res, 'res');
 
       this.items = res?.data?.data?.items ?? [];
       this.totalPage = res?.data?.data?.total ?? 1;
@@ -240,19 +261,32 @@ export default {
     },
 
     async joinCampaign(url) {
+      this.closeModal();
+
       if (!url) {
         openModal('종료된 캠페인입니다.', 'warning');
         return;
       }
 
-      const res = await api.getCampaignJoin(url, this.uid);
+      const replaceUrl = url.replace(
+        'https://api.greenp.kr',
+        '',
+      );
 
-      if (res?.data?.result === 'FAIL') {
+      console.log(replaceUrl);
+
+      const res = await api.getCampaignJoin(
+        replaceUrl,
+        this.uid,
+      );
+
+      if (!res?.data?.url) {
         openModal('종료된 캠페인입니다.', 'warning');
         return;
       }
 
-      this.$gFunc.openUrl(url);
+      const responseUrl = res.data.url;
+      window.open(responseUrl, '_blank');
     },
   },
 };

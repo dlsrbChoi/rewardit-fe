@@ -3,11 +3,11 @@
     <div class="login-home">
       <div class="title-area">
         <p>
-          <strong>사장님 전용 로그인</strong>
+          <strong>관리자 전용 로그인</strong>
         </p>
         <p>
           <span class="bold">
-            항상 즐거운 일이 생기는 SF부업 플랫폼 입니다.
+            자영업자와 일반 회원을 관리할 수 있습니다.
           </span>
         </p>
       </div>
@@ -83,11 +83,12 @@ export default {
       return true;
     },
 
-    async loginBusiness() {
+    async loginAdmin() {
       if (!this.loginValidation()) return;
 
       this.isDisabled = true;
-      const res = await api.loginBusiness(this.login);
+      // TODO: 관리자 로그인인
+      // const res = await api.loginAdmin(this.login);
 
       if (res?.data?.result !== 'OK') {
         openModal(

@@ -56,20 +56,7 @@ const routes = [
     meta: {
       isAuth: true,
     }
-  },
-  // {
-  //   path: '/mypage/qr-code/use',
-  //   name: 'qrcodeUsePage',
-  //   component: loadView('qrcodeUsePage'),
-  // },
-  {
-    path: '/admin',
-    name: 'adminPage',
-    component: loadView('adminPage'),
-    meta: {
-      isAuth: true,
-    }
-  },
+  },  
   {
     path: '/login/business',
     name: 'businessLoginPage',
@@ -82,7 +69,20 @@ const routes = [
     meta: {
       isAuth: true,
     }
-  },  
+  },
+  {
+    path: '/login/admin',
+    name: 'adminLoginPage',
+    component: loadView('adminLoginPage'),
+  },
+  {
+    path: '/admin',
+    name: 'adminPage',
+    component: loadView('adminPage'),
+    meta: {
+      isAuth: true,
+    }
+  },
 ];
 
 const router = createRouter({

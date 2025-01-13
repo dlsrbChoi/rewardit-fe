@@ -25,7 +25,7 @@
       <p>
         지급된 금액 :
         <span class="point">
-          {{ $gFunc.comma(info?.usedPoint ?? 0) }}
+          {{ $gFunc.comma(info?.usePoint ?? 0) }}
         </span>
         원
       </p>
@@ -51,10 +51,11 @@
         :page="page"
         :items-per-page="perPage"
         @page-count="pageCount = $event"
+        @click:row="showQrcode"
       >
         <template #colgroup>
           <caption>
-            마이페이지 테이블
+            QR 내역 테이블
           </caption>
         </template>
         <template #[`item.requestAt`]="{ item }">
@@ -103,8 +104,8 @@
             <input
               type="tel"
               class="middle"
-              v-model="applyQr.usedPoint"
-              @input="onlyNum($event, 'usedPoint')"
+              v-model="formattedPoint"
+              @input="formatNumber"
             />
           </div>
         </div>
@@ -125,16 +126,30 @@
       </button>
     </template>
   </QRCodeChangeModal>
+
+  <QRCodeChangeModal v-if="isQRCodeShowModal">
+    <template #info>QR 코드</template>
+    <template #content>
+      <img :src="imgSrc" alt="QR 코드" />
+    </template>
+    <template #button>
+      <button class="btn closeBtn" @click="closeModal">
+        <span class="hidden">닫기</span>
+      </button>
+    </template>
+  </QRCodeChangeModal>
 </template>
 
 <script>
 import QRCodeChangeModal from '@/components/modal/ContentsModal.vue';
+import QRCodeShowModal from '@/components/modal/ContentsModal.vue';
 import api from '@/api/api';
 import openModal from '@/util/modalSetter';
 
 export default {
   components: {
     QRCodeChangeModal,
+    QRCodeShowModal,
   },
 
   data() {
@@ -143,7 +158,7 @@ export default {
 
       page: 1,
       perPage: 10,
-      totalPage: 1,
+      totalPage: 0,
       headers: [
         {
           title: '요청일시',
@@ -167,12 +182,30 @@ export default {
       items: [],
 
       applyQr: {
-        usedPoint: null,
+        usePoint: null,
       },
+
+      imgSrc: null,
 
       isLoading: false,
       isQRCodeModal: false,
+      isQRCodeShowModal: false,
     };
+  },
+
+  computed: {
+    formattedPoint: {
+      get() {
+        return this.applyQr.usePoint
+          ? Number(this.applyQr.usePoint).toLocaleString(
+              'en-US',
+            )
+          : '';
+      },
+      set(newValue) {
+        this.applyQr.usePoint = newValue.replace(/,/g, '');
+      },
+    },
   },
 
   created() {
@@ -199,10 +232,12 @@ export default {
       this.totalPage = res?.data?.data?.total ?? 1;
     },
 
-    onlyNum(e, type) {
-      this.applyQr[type] = this.$gFunc.onlyNumber(
-        e.target.value,
+    formatNumber() {
+      const numericValue = this.applyQr.usePoint.replace(
+        /[^\d]/g,
+        '',
       );
+      this.applyQr.usePoint = +numericValue;
     },
 
     showQRCodeChangeModal() {
@@ -211,7 +246,8 @@ export default {
 
     closeModal() {
       this.isQRCodeModal = false;
-      this.applyQr.usedPoint = null;
+      this.applyQr.usePoint = null;
+      this.isQRCodeShowModal = false;
     },
 
     isValidThousandUnit(value) {
@@ -220,18 +256,18 @@ export default {
     },
 
     changeValidation() {
-      if (!this.applyQr.usedPoint) {
+      if (!this.applyQr.usePoint) {
         openModal('교환 금액을 입력해주세요.', 'warning');
         return false;
       }
 
-      if (this.info.rewardPoint < this.applyQr.usedPoint) {
+      if (this.info.rewardPoint < this.applyQr.usePoint) {
         openModal('잔여포인트가 부족합니다.', 'warning');
         return false;
       }
 
       if (
-        !this.isValidThousandUnit(this.applyQr.usedPoint)
+        !this.isValidThousandUnit(this.applyQr.usePoint)
       ) {
         openModal('천원 단위로 교환가능합니다.', 'warning');
         return false;
@@ -244,7 +280,7 @@ export default {
       if (!this.changeValidation()) return;
 
       const res = await api.generateQrcode(this.applyQr);
-      console.log(res);
+
       if (res?.data?.result === 'FAIL') {
         openModal(
           '교환에 실패하였습니다.\n다시시도해주세요.',
@@ -254,7 +290,20 @@ export default {
       }
 
       this.closeModal();
-      openModal('교환되었습니다.', 'check');
+      openModal(
+        '교환되었습니다.\n교환하신 QR을 항목에서 선택해주세요.',
+        'check',
+      );
+    },
+
+    async showQrcode(e, { item }) {
+      if (item.status === 'USED') return;
+
+      const res = await api.getQrcode(item.qrId);
+      console.log(res);
+
+      this.imgSrc = res.data;
+      this.isQRCodeShowModal = true;
     },
   },
 };

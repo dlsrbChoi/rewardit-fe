@@ -44,7 +44,7 @@
     >
       <template #colgroup>
         <caption>
-          마이페이지 테이블
+          이벤트 참여 내역 테이블
         </caption>
       </template>
       <template #[`item.adsType`]="{ item }">
@@ -92,7 +92,7 @@ export default {
 
       page: 1,
       perPage: 10,
-      totalPage: 1,
+      totalPage: 0,
       headers: [
         {
           title: '광고종류',

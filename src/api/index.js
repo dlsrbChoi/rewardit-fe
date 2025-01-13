@@ -1,6 +1,6 @@
 import axios from "axios";
-import userStore from "@/store/modules/userStore";
 import store from "@/store";
+import openModal from "@/util/modalSetter";
 
 const instance = axios.create({
   headers: {
@@ -10,29 +10,35 @@ const instance = axios.create({
 
 const refreshToken = async () => {
   const refreshToken = store.state.userStore.refreshToken;
+
   if (!refreshToken) {
     throw new Error('No refresh token available');
   }
 
   try {
-    const res = await axios.get('/api/member/refresh');
+    const res = await axios.get('/api/member/refresh', {
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+      }
+    });
     const newAccessToken = res.data.data.accessToken;
 
-    userStore.dispatch('setTokens', {
+    store.dispatch('setTokens', {
       accessToken: newAccessToken,
       refreshToken,
     });
 
     return newAccessToken;
   } catch (error) {
-    userStore.dispatch('clearTokens');
+    store.dispatch('clearTokens');
+    openModal('로그인이 만료되었습니다.\n다시 로그인해주세요.', 'warning', '/login')
     throw error;
   }
 }
 
 instance.interceptors.request.use(
   (config) => {
-    const token = store.state.userStore.accessToken 
+    const token = store.state.userStore.accessToken;
 
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
@@ -49,8 +55,9 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
 
     if (error.response && error.response.status === 401 && !originalRequest._retry) {
+      
       originalRequest._retry = true;
-
+      
       try {
         const newAccessToken = await refreshToken();
         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;

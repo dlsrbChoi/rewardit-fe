@@ -51,7 +51,7 @@
           <li @click="$router.push('/login/business')">
             사장님 페이지
           </li>
-          <li @click="$router.push('/admin')">
+          <li @click="$router.push('/login/admin')">
             관리자 페이지
           </li>
         </ul>

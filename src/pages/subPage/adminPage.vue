@@ -107,7 +107,7 @@ export default {
 
       page: 1,
       perPage: 10,
-      totalPage: 1,
+      totalPage: 0,
       headers: [
         {
           title: '가게명',

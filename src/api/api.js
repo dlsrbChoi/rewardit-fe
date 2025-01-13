@@ -8,8 +8,8 @@ export default {
   },
 
   // 캠페인 참여 요청
-  getCampaignJoin(url, params) {
-    return instance.get(url, { params });
+  getCampaignJoin(url, uid) {
+    return instance.get(`/greenp${url}&app_uid=${uid}&adid=p`);
   },
 
   /* MEMBER */
@@ -75,4 +75,7 @@ export default {
   getQRcodeUseHistory(params) {
     return instance.get('/api/shop/use-request', { params })
   },
+
+  /* ADMIN */
+  // 관리자 로그인
 };
