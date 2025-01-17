@@ -282,6 +282,7 @@ export default {
         },
       ],
       items: [],
+      info: {},
 
       signupInfo: {
         shopName: '',
@@ -316,6 +317,7 @@ export default {
       this.isLoading = false;
 
       this.items = res?.data?.data?.items ?? [];
+      this.info = res?.data?.data?.totalInfo ?? {};
       this.totalPage = res?.data?.data?.total ?? 1;
     },
 
