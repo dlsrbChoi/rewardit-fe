@@ -86,4 +86,9 @@ export default {
   loginAdmin(params) {
     return instance.post('/api/admin/login', params)
   },
+
+  // 조회
+  getManageList(params) {
+    return instance.get('/api/admin', { params })
+  }
 };

@@ -23,7 +23,7 @@
         :items="items"
         :page="page"
         :items-per-page="perPage"
-        @page-count="pageCount = $event"
+        @page-count="totalPage = $event"
       >
         <template #colgroup>
           <caption>

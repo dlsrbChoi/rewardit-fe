@@ -4,10 +4,27 @@
       <p>관리자페이지</p>
     </div>
     <div class="remain-box">
-      <p>총 사장님 수 : <span class="point">0</span> 명</p>
-      <p>총 회원 수 : <span class="point">0</span> 명</p>
-      <p>지급 금액 : <span class="point">0</span> 명</p>
-      <p>채굴 포인트 : <span class="point">0</span> 명</p>
+      <p>
+        총 사장님 수 :
+        <span class="point">
+          {{ $gFunc.comma(info.totalShopCount) }}
+        </span>
+        명
+      </p>
+      <p>
+        총 회원 수 :
+        <span class="point">
+          {{ $gFunc.comma(info.totalMemberCount) }}
+        </span>
+        명
+      </p>
+      <p>
+        지급 금액 :
+        <span class="point">
+          {{ $gFunc.comma(info.totalPayAmount) }}
+        </span>
+        원
+      </p>
     </div>
     <div class="table">
       <div class="table-top">
@@ -32,59 +49,54 @@
         :items="items"
         :page="page"
         :items-per-page="perPage"
-        @page-count="pageCount = $event"
+        @page-count="totalPage = $event"
       >
         <template #colgroup>
           <caption>
             관리자페이지 테이블
           </caption>
         </template>
-        <template #[`item.a`]="{ item }">
+        <template #[`item.shopName`]="{ item }">
           <div class="th">가게명</div>
           <div class="td">
-            {{ item.a }}
+            {{ item.shopName }}
           </div>
         </template>
-        <template #[`item.b`]="{ item }">
+        <template #[`item.name`]="{ item }">
           <div class="th">이름</div>
           <div class="td">
-            {{ item.b }}
+            {{ item.name }}
           </div>
         </template>
-        <template #[`item.c`]="{ item }">
+        <template #[`item.phone`]="{ item }">
           <div class="th">연락처</div>
           <div class="td">
-            {{ item.c }}
+            {{ item.phone }}
           </div>
         </template>
-        <template #[`item.d`]="{ item }">
-          <div class="th">누적금액</div>
+        <template #[`item.accumulateAmount`]="{ item }">
+          <div class="th">월 누적금액</div>
           <div class="td">
-            {{ $gFunc.comma(item.d) }}
+            {{ $gFunc.comma(item.accumulateAmount) }}
           </div>
         </template>
-        <template #[`item.e`]="{ item }">
+        <template #[`item.bank`]="{ item }">
           <div class="th">은행명</div>
           <div class="td">
-            {{ item.e }}
+            {{ item.bank }}
           </div>
         </template>
-        <template #[`item.f`]="{ item }">
+        <template #[`item.accountNo`]="{ item }">
           <div class="th">계좌번호</div>
           <div class="td">
-            {{ item.f }}
+            {{ item.accountNo }}
           </div>
         </template>
-        <template #[`item.g`]="{ item }">
-          <div class="th">등본<br />(확인여부)</div>
-          <div class="td">
-            {{ item.g }}
-          </div>
-        </template>
-        <template #[`item.h`]="{ item }">
+        <template #[`item.status`]="{ item }">
           <div class="th">지급 여부</div>
           <div class="td">
-            {{ item.h }}
+            <span v-if="item.status === 'PAID'">완료</span>
+            <span v-else>미지급</span>
           </div>
         </template>
       </v-data-table>
@@ -228,65 +240,48 @@ export default {
       headers: [
         {
           title: '가게명',
-          key: 'a',
+          key: 'shopName',
           align: 'center',
           sortable: false,
         },
         {
           title: '이름',
-          key: 'b',
+          key: 'name',
           align: 'center',
           sortable: false,
         },
         {
           title: '연락처',
-          key: 'c',
+          key: 'phone',
           align: 'center',
           sortable: false,
         },
         {
-          title: '누적금액',
-          key: 'd',
+          title: '월 누적금액',
+          key: 'accumulateAmount',
           align: 'center',
           sortable: false,
         },
         {
           title: '은행명',
-          key: 'e',
+          key: 'bank',
           align: 'center',
           sortable: false,
         },
         {
           title: '계좌번호',
-          key: 'f',
-          align: 'center',
-          sortable: false,
-        },
-        {
-          title: '등본(확인여부)',
-          key: 'g',
+          key: 'accountNo',
           align: 'center',
           sortable: false,
         },
         {
           title: '지급 여부',
-          key: 'h',
+          key: 'status',
           align: 'center',
           sortable: false,
         },
       ],
-      items: [
-        {
-          a: 'OO 음식점',
-          b: '주방장',
-          c: '010-1234-5678',
-          d: 100000,
-          e: '농협',
-          f: '00-0000-00000',
-          g: 'O',
-          h: '완료',
-        },
-      ],
+      items: [],
 
       signupInfo: {
         shopName: '',
@@ -307,6 +302,21 @@ export default {
   methods: {
     updateYearMonth(yearMonth) {
       this.yearMonth = yearMonth;
+    },
+
+    async getManageList() {
+      this.isLoading = true;
+      const params = {
+        page: this.page,
+        perPage: this.perPage,
+        yearMonth: this.yearMonth,
+      };
+
+      const res = await api.getManageList(params);
+      this.isLoading = false;
+
+      this.items = res?.data?.data?.items ?? [];
+      this.totalPage = res?.data?.data?.total ?? 1;
     },
 
     openSignupModal() {

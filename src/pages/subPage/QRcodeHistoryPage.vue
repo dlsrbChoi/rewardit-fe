@@ -50,7 +50,7 @@
         :items="items"
         :page="page"
         :items-per-page="perPage"
-        @page-count="pageCount = $event"
+        @page-count="totalPage = $event"
         @click:row="showQrcode"
       >
         <template #colgroup>
