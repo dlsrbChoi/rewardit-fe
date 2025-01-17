@@ -144,7 +144,6 @@ export default {
       };
 
       const res = await api.getRewardHistory(params);
-      console.log(res);
 
       this.items = res?.data?.data?.items ?? [];
       this.totalPage = res?.data?.data?.total ?? 1;

@@ -10,8 +10,7 @@
         >
           로그인
         </button>
-        <div v-else-if="!isLogin"></div>
-        <div v-else>
+        <div>
           <button
             v-if="!isMenuShow"
             type="button"
@@ -42,10 +41,16 @@
           </button>
         </div>
         <ul>
-          <li @click="$router.push('/mypage')">
+          <li
+            v-if="isLogin"
+            @click="$router.push('/mypage')"
+          >
             마이페이지
           </li>
-          <li @click="$router.push('/mypage/qr-code')">
+          <li
+            v-if="isLogin"
+            @click="$router.push('/mypage/qr-code')"
+          >
             QR 교환
           </li>
           <li @click="$router.push('/login/business')">

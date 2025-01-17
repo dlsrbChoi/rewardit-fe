@@ -44,8 +44,6 @@ export default {
   },
 
   created() {
-    console.log(this.$route.query);
-
     this.userInfo = this.$route.query;
   },
 
@@ -61,7 +59,7 @@ export default {
       }
 
       const res = await api.googleLogin(this.userInfo);
-      console.log(res);
+
       const tokenObj = res?.data?.data ?? {};
       tokenObj.name = this.userInfo.name;
       await this.$store.dispatch('setToken', tokenObj);

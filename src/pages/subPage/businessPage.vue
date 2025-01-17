@@ -67,14 +67,6 @@
       />
     </div>
   </div>
-
-  <!-- <button
-    type="button"
-    class="button black"
-    @click="showModal"
-  >
-    승인하기
-  </button> -->
 </template>
 
 <script>
@@ -123,12 +115,14 @@ export default {
       ],
       items: [],
 
+      qrId: null,
+
       isLoading: false,
     };
   },
 
   created() {
-    // this.getQRcodeUseHistory();
+    this.getQRcodeUseHistory();
   },
 
   methods: {
@@ -142,7 +136,6 @@ export default {
 
       const res = await api.getQRcodeUseHistory(params);
       this.isLoading = false;
-      console.log(res);
 
       this.items = res?.data?.data?.items ?? [];
       this.totalPage = res?.data?.data?.total ?? 1;
@@ -157,14 +150,22 @@ export default {
         `승인하시겠습니까?`,
         'confirm',
         null,
-        this.test,
+        this.acceptQrcode,
         '취소',
         '승인',
       );
     },
 
-    test() {
-      console.log('승인');
+    async acceptQrcode() {
+      const res = await api.useQrcode(this.qrId);
+
+      if (res?.result !== 'OK') {
+        openModal('승인 실패', 'warning');
+        return;
+      }
+
+      openModal('승인되었습니다.', 'check');
+      this.getQRcodeUseHistory();
     },
   },
 };

@@ -39,6 +39,7 @@ const routes = [
     component: loadView('rewardPage'),
     meta: {
       isAuth: true,
+      role: "ROLE_USER",
     }
   },
   {
@@ -47,6 +48,7 @@ const routes = [
     component: loadView('generalMyPage'),
     meta: {
       isAuth: true,
+      role: "ROLE_USER",
     }
   },
   {
@@ -55,6 +57,7 @@ const routes = [
     component: loadView('qrcodeHistoryPage'),
     meta: {
       isAuth: true,
+      role: "ROLE_USER",
     }
   },  
   {
@@ -68,6 +71,7 @@ const routes = [
     component: loadView('businessPage'),
     meta: {
       isAuth: true,
+      role: "ROLE_SHOP",
     }
   },
   {
@@ -81,6 +85,7 @@ const routes = [
     component: loadView('adminPage'),
     meta: {
       isAuth: true,
+      role: "ROLE_ADMIN",
     }
   },
 ];
@@ -107,6 +112,7 @@ router.afterEach((to, from) => {
 
 router.beforeEach((to, from, next) => {
   const isLogin = store.state.userStore.isLogin;
+  const role = store.state.userStore.role;
   const meta = to.meta;
 
   if (meta.isAuth && !isLogin) {
@@ -114,6 +120,12 @@ router.beforeEach((to, from, next) => {
     next('/login');
     return;
   }
+
+  // if (meta.role && meta.role !== role) {
+  //   openModal('접근 권한이 없습니다.', 'warning');
+  //   next('/main');
+  //   return;
+  // }
 
   next();
 });

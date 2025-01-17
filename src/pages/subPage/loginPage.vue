@@ -36,6 +36,7 @@
 
 <script>
 import api from '@/api/api';
+import VueJwtDecode from 'vue-jwt-decode';
 
 export default {
   data() {
@@ -108,8 +109,16 @@ export default {
       const loginRes = await api.googleLogin(params);
 
       const tokenObj = loginRes?.data?.data ?? {};
+
+      const userRole = VueJwtDecode.decode(
+        tokenObj.accessToken,
+      ).role;
+
       await this.$store.dispatch('setTokens', tokenObj);
-      await this.$store.dispatch('setUsers', userInfo);
+      await this.$store.dispatch('setUsers', {
+        ...userInfo,
+        role: userRole,
+      });
       this.$router.push('/reward');
     },
   },

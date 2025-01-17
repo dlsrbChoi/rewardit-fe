@@ -3,6 +3,7 @@ const userStore = {
     accessToken: null,
     refreshToken: null,
     name: null,
+    role: null,
     isLogin: false,
   }),
 
@@ -14,6 +15,7 @@ const userStore = {
   mutations: {
     setUsers: (state, payload) => {
       state.name = payload.name;
+      state.role = payload.role;
     },
 
     setTokens: (state, payload) => {
@@ -25,8 +27,9 @@ const userStore = {
     clearTokens: state => {
       state.accessToken = null;
       state.refreshToken = null;
-      state.isLogin = false;
       state.name = null;
+      state.role = null;
+      state.isLogin = false;
     },
   },
 

@@ -47,7 +47,7 @@
     <div class="half-title">
       <p>
         자영업자와 공존하는 <br />
-        부업 플랫폼 Rewordit
+        부업 플랫폼 Rewardit
       </p>
     </div>
   </div>
@@ -66,6 +66,12 @@ export default {
 
       isDisabled: false,
     };
+  },
+
+  computed: {
+    isLogin() {
+      return this.$store.state.userStore?.isLogin ?? false;
+    },
   },
 
   methods: {
@@ -98,11 +104,23 @@ export default {
         return;
       }
 
+      if (this.isLogin) {
+        this.$store.dispatch('clearTokens');
+      }
+
       const accessToken =
         res?.data?.data?.accessToken ?? '';
+      const userRole =
+        VueJwtDecode.decode(accessToken).role;
+
       await this.$store.dispatch('setTokens', {
         accessToken,
       });
+      await this.$store.dispatch('setUsers', {
+        name: '자영업자',
+        role: userRole,
+      });
+
       this.isDisabled = false;
 
       this.$router.push('/business');

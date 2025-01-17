@@ -18,6 +18,8 @@
     }
 
     .nav-button-area {
+      display: flex;
+
       button {
         font-size: 12px;
         background-color: v.$primary;
@@ -27,6 +29,10 @@
         padding: 6px 12px;
 
         + button {
+          margin-left: 8px;
+        }
+
+        + div {
           margin-left: 8px;
         }
       }
@@ -307,7 +313,7 @@
         justify-content: center;
 
         li {
-          width: 100px;
+          width: 120px;
           background-color: v.$white;
           color: v.$second;
           padding: 8px 0;
@@ -317,18 +323,33 @@
 
           &:first-child {
             border-top-left-radius: 20px;
-            border-bottom-left-radius: 20px;
           }
 
           &:last-child {
             border-right: none;
             border-top-right-radius: 20px;
-            border-bottom-right-radius: 20px;
           }
 
           &.active {
             background-color: v.$second;
             color: v.$primary;
+          }
+        }
+
+        + ul {
+          li {
+            border-top: 1px solid v.$primary;
+
+            &:first-child {
+              border-top-left-radius: 0px;
+              border-bottom-left-radius: 20px;
+            }
+
+            &:last-child {
+              border-right: none;
+              border-top-right-radius: 0px;
+              border-bottom-right-radius: 20px;
+            }
           }
         }
       }
@@ -562,6 +583,19 @@
   .table-top {
     margin-bottom: 10px;
     text-align: start;
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      &.signup {
+        border-radius: 4px;
+        background-color: v.$second;
+        color: v.$white;
+        font-size: 15px;
+        font-weight: 700;
+        padding: 0 10px;
+      }
+    }
   }
 
   .table-bottom {

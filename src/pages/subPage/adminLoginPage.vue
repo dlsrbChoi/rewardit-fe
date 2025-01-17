@@ -6,9 +6,7 @@
           <strong>관리자 전용 로그인</strong>
         </p>
         <p>
-          <span class="bold">
-            자영업자와 일반 회원을 관리할 수 있습니다.
-          </span>
+          <span class="bold"> </span>
         </p>
       </div>
       <div class="login-area">
@@ -35,7 +33,7 @@
             type="button"
             class="button black"
             :disabled="isDisabled"
-            @click="loginBusiness"
+            @click="loginAdmin"
           >
             로그인
           </button>
@@ -47,7 +45,7 @@
     <div class="half-title">
       <p>
         자영업자와 공존하는 <br />
-        부업 플랫폼 Rewordit
+        부업 플랫폼 Rewardit
       </p>
     </div>
   </div>
@@ -55,6 +53,8 @@
 
 <script>
 import openModal from '@/util/modalSetter';
+import api from '@/api/api';
+import VueJwtDecode from 'vue-jwt-decode';
 
 export default {
   data() {
@@ -66,6 +66,12 @@ export default {
 
       isDisabled: false,
     };
+  },
+
+  computed: {
+    isLogin() {
+      return this.$store.state.userStore?.isLogin ?? false;
+    },
   },
 
   methods: {
@@ -87,8 +93,7 @@ export default {
       if (!this.loginValidation()) return;
 
       this.isDisabled = true;
-      // TODO: 관리자 로그인인
-      // const res = await api.loginAdmin(this.login);
+      const res = await api.loginAdmin(this.login);
 
       if (res?.data?.result !== 'OK') {
         openModal(
@@ -99,11 +104,23 @@ export default {
         return;
       }
 
+      if (this.isLogin) {
+        this.$store.dispatch('clearTokens');
+      }
+
       const accessToken =
         res?.data?.data?.accessToken ?? '';
+      const userRole =
+        VueJwtDecode.decode(accessToken).role;
+
       await this.$store.dispatch('setTokens', {
         accessToken,
       });
+      await this.$store.dispatch('setUsers', {
+        name: '관리자',
+        role: userRole,
+      });
+
       this.isDisabled = false;
 
       this.$router.push('/business');

@@ -19,6 +19,14 @@
         >
           SNS 구독<br />광고
         </li>
+      </ul>
+      <ul>
+        <li
+          :class="{ active: adsSubCate === 'QUIZ' }"
+          @click="changeCategory('QUIZ')"
+        >
+          퀴즈형<br />광고
+        </li>
         <li
           :class="{ active: adsSubCate === 'SECOND_30' }"
           @click="changeCategory('SECOND_30')"
@@ -151,6 +159,7 @@ import CampaignExplainModal from '@/components/modal/RewardModal.vue';
 import CampaignConditionModal from '@/components/modal/RewardModal.vue';
 import api from '@/api/api';
 import openModal from '@/util/modalSetter';
+import axios from 'axios';
 
 export default {
   components: {
@@ -196,8 +205,10 @@ export default {
         this.adsSubTitle = '30초 광고';
       } else if (this.adsSubCate === 'PARTICIPATE') {
         this.adsSubTitle = '참여형 광고';
-      } else {
+      } else if (this.adsSubCate === 'SNS_SUBSCRIBE') {
         this.adsSubTitle = 'SNS 구독 광고';
+      } else {
+        this.adsSubTitle = '퀴즈형 광고';
       }
 
       this.getCampaignList();
@@ -229,6 +240,7 @@ export default {
       };
 
       const res = await api.getCampaignList(params);
+      console.log(res);
 
       this.items = res?.data?.data?.items ?? [];
       this.totalPage = res?.data?.data?.total ?? 1;
@@ -260,32 +272,26 @@ export default {
       this.isCampaignCondition = false;
     },
 
-    async joinCampaign(url) {
+    async joinCampaign(urlString) {
       this.closeModal();
 
-      if (!url) {
+      if (!urlString) {
         openModal('종료된 캠페인입니다.', 'warning');
         return;
       }
 
-      const replaceUrl = url.replace(
-        'https://api.greenp.kr',
-        '',
-      );
+      const params = {
+        clickUrl: urlString,
+      };
 
-      console.log(replaceUrl);
+      const res = await api.getCampaignJoin(params);
 
-      const res = await api.getCampaignJoin(
-        replaceUrl,
-        this.uid,
-      );
-
-      if (!res?.data?.url) {
+      if (res?.result !== 'OK') {
         openModal('종료된 캠페인입니다.', 'warning');
         return;
       }
 
-      const responseUrl = res.data.url;
+      const responseUrl = res.data;
       window.open(responseUrl, '_blank');
     },
   },

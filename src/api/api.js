@@ -8,8 +8,8 @@ export default {
   },
 
   // 캠페인 참여 요청
-  getCampaignJoin(url, uid) {
-    return instance.get(`/greenp${url}&app_uid=${uid}&adid=p`);
+  getCampaignJoin(params) {
+    return instance.get('/api/campaign/participate', { params });
   },
 
   /* MEMBER */
@@ -76,6 +76,14 @@ export default {
     return instance.get('/api/shop/use-request', { params })
   },
 
+  // 사업자 회원가입
+  signupBusiness(params) {
+    return instance.post(' /api/shop', params)
+  },
+
   /* ADMIN */
   // 관리자 로그인
+  loginAdmin(params) {
+    return instance.post('/api/admin/login', params)
+  },
 };

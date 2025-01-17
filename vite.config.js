@@ -10,13 +10,11 @@ export default defineConfig({
       '/api': {
         target: 'http://43.201.37.36:8080',
         changeOrigin: true,
-        ws: false,
       },
       '/greenp': {
         target: 'https://api.greenp.kr',
         changeOrigin: true,
-        ws: false,
-        rewrite: (path) => path.replace(/^\/greenp/, '')
+        rewrite: (path) => path.replace(/^\/greenp/, ''),
       }
     },
   },

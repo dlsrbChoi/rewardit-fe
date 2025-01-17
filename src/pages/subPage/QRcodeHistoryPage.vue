@@ -127,7 +127,7 @@
     </template>
   </QRCodeChangeModal>
 
-  <QRCodeChangeModal v-if="isQRCodeShowModal">
+  <QRCodeShowModal v-if="isQRCodeShowModal">
     <template #info>QR 코드</template>
     <template #content>
       <img :src="imgSrc" alt="QR 코드" />
@@ -137,7 +137,7 @@
         <span class="hidden">닫기</span>
       </button>
     </template>
-  </QRCodeChangeModal>
+  </QRCodeShowModal>
 </template>
 
 <script>
@@ -300,7 +300,6 @@ export default {
       if (item.status === 'USED') return;
 
       const res = await api.getQrcode(item.qrId);
-      console.log(res);
 
       this.imgSrc = res.data;
       this.isQRCodeShowModal = true;
