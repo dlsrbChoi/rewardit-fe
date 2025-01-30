@@ -123,7 +123,7 @@ export default {
 
       this.isDisabled = false;
 
-      this.$router.push('/business');
+      this.$router.push('/admin');
     },
   },
 };

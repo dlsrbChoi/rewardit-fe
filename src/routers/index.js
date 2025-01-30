@@ -114,6 +114,16 @@ router.beforeEach((to, from, next) => {
   const isLogin = store.state.userStore.isLogin;
   const role = store.state.userStore.role;
   const meta = to.meta;
+  const urlParams = new URLSearchParams(window.location.search);
+
+  if (urlParams.get('qrId')) {
+    router.push('/login/business', {
+      query: {
+        qrId: urlParams.get('qrId')
+      }
+    });
+    return;
+  }
 
   if (meta.isAuth && !isLogin) {
     openModal('로그인이 필요합니다.', 'warning');
@@ -121,11 +131,11 @@ router.beforeEach((to, from, next) => {
     return;
   }
 
-  // if (meta.role && meta.role !== role) {
-  //   openModal('접근 권한이 없습니다.', 'warning');
-  //   next('/main');
-  //   return;
-  // }
+  if (meta.role && meta.role !== role) {
+    openModal('접근 권한이 없습니다.\n로그아웃 후 새로운 계정으로\n로그인 해주세요.', 'warning');
+    next('/main');
+    return;
+  }
 
   next();
 });

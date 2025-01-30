@@ -22,7 +22,6 @@
 
       button {
         font-size: 12px;
-        background-color: v.$primary;
         color: v.$second;
         border: 1px solid v.$second;
         border-radius: 50px;
@@ -1061,6 +1060,13 @@ select {
 }
 .v-pagination__list {
   margin-top: 20px;
+}
+.v-data-table-rows-loading {
+  padding: 40px 0;
+
+  td {
+    justify-content: center;
+  }
 }
 
 #G_OAuth_btn {

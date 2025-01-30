@@ -73,7 +73,11 @@
         <template #[`item.status`]="{ item }">
           <div class="th">상태</div>
           <div class="td">
-            {{ item.status }}
+            {{
+              item.status === 'AVAILABLE'
+                ? '미사용'
+                : '사용'
+            }}
           </div>
         </template>
       </v-data-table>
@@ -130,7 +134,9 @@
   <QRCodeShowModal v-if="isQRCodeShowModal">
     <template #info>QR 코드</template>
     <template #content>
-      <img :src="imgSrc" alt="QR 코드" />
+      <div style="text-align: center; width: 100%">
+        <img v-if="imgSrc" :src="imgSrc" alt="QR 코드" />
+      </div>
     </template>
     <template #button>
       <button class="btn closeBtn" @click="closeModal">
@@ -294,6 +300,8 @@ export default {
         '교환되었습니다.\n교환하신 QR을 항목에서 선택해주세요.',
         'check',
       );
+      this.getMemberInfo();
+      this.getQrcodeHistory();
     },
 
     async showQrcode(e, { item }) {
@@ -301,7 +309,14 @@ export default {
 
       const res = await api.getQrcode(item.qrId);
 
-      this.imgSrc = res.data;
+      const base64 = btoa(
+        new Uint8Array(res.data).reduce(
+          (data, byte) => data + String.fromCharCode(byte),
+          '',
+        ),
+      );
+      this.imgSrc = `data:image/png;base64,${base64}`;
+
       this.isQRCodeShowModal = true;
     },
   },

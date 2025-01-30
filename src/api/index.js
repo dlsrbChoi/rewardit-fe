@@ -54,6 +54,13 @@ instance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    if (error.response && error.response.status === 500 && !originalRequest._retry) {
+      
+      originalRequest._retry = true;
+
+      openModal('서버와의 연결이 불안정합니다.', 'warning', '/main');
+    }
+
     if (error.response && error.response.status === 401 && !originalRequest._retry) {
       
       originalRequest._retry = true;
@@ -69,6 +76,7 @@ instance.interceptors.response.use(
         return Promise.reject(refreshError);
       }
     }
+
     return Promise.reject(error);
   }
 )

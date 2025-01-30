@@ -21,7 +21,7 @@
       <p>
         지급 금액 :
         <span class="point">
-          {{ $gFunc.comma(info.totalPayAmount) }}
+          {{ $gFunc.comma(info?.totalPayAmount ?? 0) }}
         </span>
         원
       </p>
@@ -202,7 +202,7 @@
           <button
             type="button"
             class="button black"
-            @click="createAccount"
+            @click="signupBusiness"
           >
             계정생성
           </button>
@@ -300,11 +300,18 @@ export default {
     };
   },
 
-  methods: {
-    updateYearMonth(yearMonth) {
-      this.yearMonth = yearMonth;
+  watch: {
+    yearMonth() {
+      this.getManageList();
     },
+  },
 
+  created() {
+    this.getManageList();
+    this.getTotalInfo();
+  },
+
+  methods: {
     async getManageList() {
       this.isLoading = true;
       const params = {
@@ -317,8 +324,19 @@ export default {
       this.isLoading = false;
 
       this.items = res?.data?.data?.items ?? [];
-      this.info = res?.data?.data?.totalInfo ?? {};
       this.totalPage = res?.data?.data?.total ?? 1;
+    },
+
+    async getTotalInfo() {
+      const res = await api.getTotalInfo();
+
+      this.info = res?.data?.data ?? {};
+    },
+
+    updateYearMonth(yearMonth) {
+      this.yearMonth = yearMonth;
+
+      this.getManageList();
     },
 
     openSignupModal() {

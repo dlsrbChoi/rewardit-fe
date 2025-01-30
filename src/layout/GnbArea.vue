@@ -4,11 +4,18 @@
       <div class="logo" @click="moveLogoSite">Rewardit</div>
       <div class="nav-button-area">
         <button
-          v-if="$route.name === 'main'"
+          v-if="$route.path === '/main' && !isLogin"
           type="button"
           @click="$router.push('/login')"
         >
           로그인
+        </button>
+        <button
+          v-if="$route.path === '/main' && isLogin"
+          type="button"
+          @click="handleLogout"
+        >
+          로그아웃
         </button>
         <div>
           <button
@@ -84,6 +91,10 @@ export default {
     isLogin() {
       return this.$store.state.userStore?.isLogin ?? false;
     },
+
+    role() {
+      return this.$store.state.userStore?.role ?? '';
+    },
   },
 
   watch: {
@@ -100,6 +111,16 @@ export default {
     moveLogoSite() {
       if (!this.isLogin) {
         this.$router.push('/main');
+        return;
+      }
+
+      if (this.role === 'ROLE_SHOP') {
+        this.$router.push('/business');
+        return;
+      }
+
+      if (this.role === 'ROLE_ADMIN') {
+        this.$router.push('/admin');
         return;
       }
 

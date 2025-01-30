@@ -55,6 +55,8 @@
 
 <script>
 import openModal from '@/util/modalSetter';
+import api from '@/api/api';
+import VueJwtDecode from 'vue-jwt-decode';
 
 export default {
   data() {

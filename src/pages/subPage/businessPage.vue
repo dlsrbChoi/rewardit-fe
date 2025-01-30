@@ -4,8 +4,7 @@
       <p>사장님페이지</p>
     </div>
     <div class="remain-box">
-      <p>총 파트너 수 : <span class="point">0</span> 명</p>
-      <p>지급 금액 : <span class="point">0</span> 명</p>
+      <p>사용 금액 : <span class="point">0</span> 원</p>
     </div>
     <div class="table">
       <div class="table-top">
@@ -121,7 +120,18 @@ export default {
     };
   },
 
+  watch: {
+    yearMonth() {
+      this.getQRcodeUseHistory();
+    },
+  },
+
   created() {
+    if (this.$route.query.qrId) {
+      this.qrId = this.$route.query.qrId;
+      this.showModal();
+    }
+
     this.getQRcodeUseHistory();
   },
 
@@ -159,8 +169,11 @@ export default {
     async acceptQrcode() {
       const res = await api.useQrcode(this.qrId);
 
-      if (res?.result !== 'OK') {
-        openModal('승인 실패', 'warning');
+      if (res?.data?.result !== 'OK') {
+        openModal(
+          res.data.message ? res.data.message : '승인 실패',
+          'warning',
+        );
         return;
       }
 

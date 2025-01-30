@@ -6,11 +6,12 @@
     <div class="tab-menu">
       <ul>
         <li
-          :class="{ active: adsSubCate === 'PARTICIPATE' }"
-          @click="changeCategory('PARTICIPATE')"
+          :class="{ active: adsSubCate === 'QUIZ' }"
+          @click="changeCategory('QUIZ')"
         >
-          참여형<br />광고
+          퀴즈형<br />광고
         </li>
+
         <li
           :class="{
             active: adsSubCate === 'SNS_SUBSCRIBE',
@@ -22,10 +23,10 @@
       </ul>
       <ul>
         <li
-          :class="{ active: adsSubCate === 'QUIZ' }"
-          @click="changeCategory('QUIZ')"
+          :class="{ active: adsSubCate === 'PARTICIPATE' }"
+          @click="changeCategory('PARTICIPATE')"
         >
-          퀴즈형<br />광고
+          참여형<br />광고
         </li>
         <li
           :class="{ active: adsSubCate === 'SECOND_30' }"
@@ -174,8 +175,8 @@ export default {
       page: 1,
       perPage: 10,
       totalPage: 0,
-      adsSubCate: 'PARTICIPATE',
-      adsSubTitle: '참여형 광고',
+      adsSubCate: 'QUIZ',
+      adsSubTitle: '퀴즈형 광고',
 
       items: [],
       selected: {},
@@ -240,7 +241,6 @@ export default {
       };
 
       const res = await api.getCampaignList(params);
-      console.log(res);
 
       this.items = res?.data?.data?.items ?? [];
       this.totalPage = res?.data?.data?.total ?? 1;
@@ -286,12 +286,17 @@ export default {
 
       const res = await api.getCampaignJoin(params);
 
-      if (res?.result !== 'OK') {
-        openModal('종료된 캠페인입니다.', 'warning');
+      if (res?.data?.result === 'FAIL') {
+        openModal(
+          res?.data?.message
+            ? res?.data?.message
+            : '종료된 캠페인입니다.',
+          'warning',
+        );
         return;
       }
 
-      const responseUrl = res.data;
+      const responseUrl = res.data.data;
       window.open(responseUrl, '_blank');
     },
   },

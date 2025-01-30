@@ -9,7 +9,7 @@ export default {
 
   // 캠페인 참여 요청
   getCampaignJoin(params) {
-    return instance.get('/api/campaign/participate', { params });
+    return instance.post('/api/campaign/participate', params);
   },
 
   /* MEMBER */
@@ -47,7 +47,9 @@ export default {
 
   // 포인트 사용 QR 조회
   getQrcode(qrId) {
-    return instance.get(`/api/qr/${qrId}`);
+    return instance.get(`/api/qr/${qrId}`, {
+      responseType: 'arraybuffer'
+    });
   },
 
   // QR 사용 처리
@@ -76,10 +78,6 @@ export default {
     return instance.get('/api/shop/use-request', { params })
   },
 
-  // 사업자 회원가입
-  signupBusiness(params) {
-    return instance.post(' /api/shop', params)
-  },
 
   /* ADMIN */
   // 관리자 로그인
@@ -90,5 +88,15 @@ export default {
   // 조회
   getManageList(params) {
     return instance.get('/api/admin', { params })
-  }
+  },
+
+  // total 조회
+  getTotalInfo() {
+    return instance.get('/api/admin/total')
+  },
+
+  // 사업자 회원가입
+  signupBusiness(params) {
+    return instance.post(' /api/shop', params)
+  },
 };
