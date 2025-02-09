@@ -96,7 +96,15 @@
           <div class="th">지급 여부</div>
           <div class="td">
             <span v-if="item.status === 'PAID'">완료</span>
-            <span v-else>미지급</span>
+            <div v-else class="adjustment">
+              <span>미지급</span>
+              <button
+                type="button"
+                @click="applyAdjustment(item)"
+              >
+                지급하기
+              </button>
+            </div>
           </div>
         </template>
       </v-data-table>
@@ -412,6 +420,33 @@ export default {
 
       this.closeModal();
       openModal('계정이 생성되었습니다.', 'check');
+    },
+
+    async applyAdjustment(item) {
+      const params = {
+        shopId: item.id,
+        adjustmentCost: item.accumulateAmount,
+        adjustmentDate: this.yearMonth,
+      };
+
+      const res = await api.applyAdjustment(params);
+
+      if (res?.data?.result !== 'OK') {
+        openModal(
+          '지급에 실패하였습니다.\n다시시도해주세요.',
+          'warning',
+        );
+        this.getManageList();
+        this.getTotalInfo();
+        return;
+      }
+
+      openModal(
+        `${this.yearMonth} 일자의 지급이 등록되었습니다.`,
+        'check',
+      );
+      this.getManageList();
+      this.getTotalInfo();
     },
   },
 };

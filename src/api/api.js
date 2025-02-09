@@ -97,6 +97,11 @@ export default {
 
   // 사업자 회원가입
   signupBusiness(params) {
-    return instance.post(' /api/shop', params)
+    return instance.post('/api/shop', params)
+  },
+
+  // 월별 지급 등록
+  applyAdjustment(params) {
+    return instance.post('/api/admin/adjustment', params)
   },
 };

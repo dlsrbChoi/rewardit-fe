@@ -700,6 +700,18 @@
               text-align: left;
               justify-content: flex-start;
               overflow: hidden;
+
+              .adjustment {
+                button {
+                  margin-left: 10px;
+                  border-radius: 4px;
+                  background-color: v.$second;
+                  color: v.$white;
+                  font-size: 13px;
+                  font-weight: 700;
+                  padding: 0 10px;
+                }
+              }
             }
           }
         }
