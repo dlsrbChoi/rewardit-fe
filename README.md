@@ -58,6 +58,7 @@
 <p>
   <img src="./src/assets/images/UI/reward.png" alt="광고 참여" width="200" />  
   <img src="./src/assets/images/UI/description.png" alt="모달 설명" width="200" />
+  <img src="./src/assets/images/UI/menu.png" alt="모달 설명" width="200" />
 </p>
 
 ---
